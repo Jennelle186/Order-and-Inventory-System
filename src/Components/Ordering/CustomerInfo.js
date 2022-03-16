@@ -93,6 +93,7 @@ const CustomerInfo = ({ cartItems, totalAmount, handleCartClearance }) => {
         barangay,
         landMark,
         number,
+        instructions,
         orderCreatedAt: new Date(),
       });
       updateData();
@@ -146,16 +147,18 @@ const CustomerInfo = ({ cartItems, totalAmount, handleCartClearance }) => {
                   variant="outlined"
                   label="Phone Number"
                   fullWidth
+                  value={number} //putting this would not allow the user to delete the first digit
                   onChange={handleNumber}
                   required
                   inputProps={{
                     maxLength: 11,
                   }}
                   InputProps={{
-                    disableUnderline: true,
+                    disableunderline: "true", // *** Changed case and value per error from React
                   }}
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   type="text"

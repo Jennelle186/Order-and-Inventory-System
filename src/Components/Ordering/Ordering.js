@@ -137,10 +137,12 @@ const Ordering = () => {
     setCartItems([]);
   };
 
-  const totalAmount = cartItems.reduce(
+  const amount = cartItems.reduce(
     (price, item) => price + item.quantity * item.price,
     0
   );
+  const [discount, setDiscount] = useState(0);
+  let totalAmount = Number(amount) - (Number(amount) * Number(discount)) / 100;
 
   return (
     <div>
@@ -250,6 +252,9 @@ const Ordering = () => {
               handleCartClearance={handleCartClearance}
               handleRemove={handleRemove}
               handleAdd={handleAdd}
+              discount={discount}
+              amount={amount}
+              setDiscount={setDiscount}
               totalAmount={totalAmount}
             />
           </Grid>

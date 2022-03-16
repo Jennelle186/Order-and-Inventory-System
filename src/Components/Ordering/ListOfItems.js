@@ -12,6 +12,7 @@ import {
   IconButton,
   TablePagination,
   Typography,
+  TextField,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -22,6 +23,9 @@ const ListItems = ({
   handleRemove,
   handleAdd,
   totalAmount,
+  discount,
+  setDiscount,
+  amount,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -144,7 +148,19 @@ const ListItems = ({
           />
           <Divider />
           <div>
+            <Typography>
+              Amount: ₱{" "}
+              {amount.toLocaleString(navigator.language, {
+                minimumFractionDigits: 2,
+              })}
+            </Typography>
             <br />
+            <TextField
+              type="number"
+              label="Discount in Percentage"
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+            />
             <Typography>
               Total amount: ₱{" "}
               {totalAmount.toLocaleString(navigator.language, {

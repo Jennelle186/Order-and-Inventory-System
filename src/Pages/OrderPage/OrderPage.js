@@ -1,8 +1,8 @@
 import React from "react";
-import { Stack, Button, Grid, ThemeProvider, createTheme } from "@mui/material";
+import { Stack, Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 
-import TodayReport from "../../Components/OrderTable/today";
+import OrderReport from "../../Components/OrderTable/today";
 
 const OrderPage = () => {
   return (
@@ -15,12 +15,7 @@ const OrderPage = () => {
             </Button>
           </Link>
         </Stack>
-
-        {/* table below */}
-        <ThemeProvider theme={createTheme()}>
-          {" "}
-          <TodayReport />
-        </ThemeProvider>
+        {/* table below */} <OrderReport />
       </Grid>
     </div>
   );

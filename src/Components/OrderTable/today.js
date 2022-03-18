@@ -12,6 +12,8 @@ import {
   ListItemText,
   Typography,
   TableFooter,
+  ThemeProvider,
+  createTheme,
 } from "@mui/material";
 
 import { db } from "../../Firebase/utils";
@@ -19,7 +21,7 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 import Loading from "../Loading/loading";
 
-const TodayReport = () => {
+const OrderReport = () => {
   const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -28,9 +30,10 @@ const TodayReport = () => {
     let isMounted = true;
 
     const getOrders = async () => {
-      const querySnapshot = await getDocs(collection(db, "orders"));
-      // const q = query(querySnapshot, orderBy("orderCreatedAt"));
-      // console.log(q, "q");
+      // const querySnapshot = await getDocs(collection(db, "orders"));
+      const ordersRef = collection(db, "orders");
+      const q = query(ordersRef, orderBy("orderCreatedAt", "desc"));
+      const querySnapshot = await getDocs(q);
       const arr = [];
       querySnapshot.forEach((doc) => {
         arr.push({
@@ -60,24 +63,34 @@ const TodayReport = () => {
       label: "System ID", //or the order ID here
       options: {
         filter: true,
-        sort: true,
+        display: false,
+      },
+    },
+    {
+      name: "firstName",
+      label: "Name",
+      options: {
+        filter: false,
         display: false,
       },
     },
 
     {
-      name: "firstName",
-      label: "Name",
+      name: "lastName",
+      label: "Full Name",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <div>{tableMeta.rowData[1] + " " + tableMeta.rowData[2]}</div>;
+        },
       },
     },
     {
       name: "houseNo",
       label: "HouseNo",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         display: false,
       },
@@ -86,7 +99,7 @@ const TodayReport = () => {
       name: "streetAddress",
       label: "House No & Street Address",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
@@ -117,7 +130,7 @@ const TodayReport = () => {
       name: "cartItems",
       label: "Orders",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         display: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -129,7 +142,7 @@ const TodayReport = () => {
       name: "cartItems",
       label: "Orders",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           return Object.entries(
@@ -183,7 +196,7 @@ const TodayReport = () => {
       name: "number",
       label: "Phone Number",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
       },
     },
@@ -230,7 +243,7 @@ const TodayReport = () => {
       name: "instructions",
       label: "Instructions",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         display: false,
       },
@@ -245,7 +258,7 @@ const TodayReport = () => {
 
   const calculateTotalSum = (data) => {
     const totalAmount = data
-      .map((a) => a.data[8])
+      .map((a) => a.data[9])
       .reduce((a, b) => (a += b), 0);
     return totalAmount;
   };
@@ -259,7 +272,6 @@ const TodayReport = () => {
     onTableChange: handleTableChange,
     onTableInit: handleTableChange,
     renderExpandableRow: (rowData, rowMeta) => {
-      console.log(rowData);
       return (
         <tr>
           <td colSpan={4}>
@@ -273,7 +285,7 @@ const TodayReport = () => {
                   <TableCell align="right">Unit Price</TableCell>
                 </TableHead>
                 <TableBody>
-                  {rowData[6].map((row) => {
+                  {rowData[7].map((row) => {
                     return (
                       <TableRow key={row.id + row.color}>
                         <TableCell component="th" scope="row" align="right">
@@ -300,7 +312,7 @@ const TodayReport = () => {
                 </TableBody>
                 <TableFooter>
                   {" "}
-                  <Typography> Instructions: {rowData[13]}</Typography>
+                  <Typography> Instructions: {rowData[14]}</Typography>
                 </TableFooter>
               </Table>
             </TableContainer>
@@ -321,12 +333,14 @@ const TodayReport = () => {
               minimumFractionDigits: 2,
             })}
           </Typography>
-          <MUIDataTable
-            title={"Reports"}
-            columns={columns}
-            data={orders}
-            options={options}
-          />
+          <ThemeProvider theme={createTheme()}>
+            <MUIDataTable
+              title={"List of Orders Reports"}
+              columns={columns}
+              data={orders}
+              options={options}
+            />
+          </ThemeProvider>
         </>
       ) : (
         <>
@@ -337,4 +351,4 @@ const TodayReport = () => {
   );
 };
 
-export default TodayReport;
+export default OrderReport;

@@ -35,6 +35,8 @@ const Login = (props) => {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // const googleHandler = async () => {
   //   signInWithGoogle.setCustomParameters({ prompt: "select_account" });
   //   signInWithPopup(auth, signInWithGoogle)
@@ -80,16 +82,20 @@ const Login = (props) => {
     e.preventDefault();
     const auth = getAuth();
     console.log(email, password, "1");
+    setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
+
         const user = userCredential.user;
+        setIsLoading(false);
         navigate("/Dashboard");
         // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        setIsLoading(false);
         alert(errorMessage);
       });
   };
@@ -142,9 +148,24 @@ const Login = (props) => {
               />
             </Grid>
 
-            <Grid item xs>
-              <ButtonForm type="submit">Login</ButtonForm>
-            </Grid>
+            {/* {isLoading && <div>Loading ...</div>} */}
+
+            {isLoading ? (
+              <>
+                {" "}
+                <Grid item xs>
+                  <ButtonForm type="submit" disabled>
+                    Loading..
+                  </ButtonForm>
+                </Grid>
+              </>
+            ) : (
+              <>
+                <Grid item xs>
+                  <ButtonForm type="submit">Submit</ButtonForm>
+                </Grid>
+              </>
+            )}
 
             {/* <Grid item xs>
               <ButtonForm onClick={googleHandler}>Login with Gmail</ButtonForm>

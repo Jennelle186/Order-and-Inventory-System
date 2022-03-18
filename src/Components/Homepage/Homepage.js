@@ -1,12 +1,17 @@
 import React from "react";
 
 import Header from "../Header/Header";
+import OrderReport from "../OrderTable/today";
+
+import { Grid } from "@mui/material";
 
 const Homepage = () => {
   return (
     <>
       <Header />
-      <h1>Homepage or the dashboard</h1>
+      <Grid style={{ padding: "1rem" }}>
+        <OrderReport />
+      </Grid>
     </>
   );
 };

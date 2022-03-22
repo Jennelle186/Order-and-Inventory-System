@@ -180,17 +180,6 @@ const OrderReport = () => {
         },
       },
     },
-    // {
-    //   name: "orderCreatedAt",
-    //   label: "Ordered date",
-    //   options: {
-    //     filter: true,
-    //     sort: true,
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       return new Date(value.seconds * 1000).toDateString();
-    //     },
-    //   },
-    // },
 
     {
       name: "number",
@@ -246,6 +235,15 @@ const OrderReport = () => {
         filter: false,
         sort: true,
         display: false,
+      },
+    },
+    {
+      name: "orderStatus",
+      label: "Order Status",
+      options: {
+        filter: true,
+        sort: true,
+        display: true,
       },
     },
   ];

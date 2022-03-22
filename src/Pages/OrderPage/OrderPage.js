@@ -2,8 +2,7 @@ import React from "react";
 import { Stack, Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 
-import OrderReport from "../../Components/OrderTable/today";
-import PendingOrders from "../../Components/OrderTable/PendingOrders";
+import OrderTab from "./OrderTab";
 
 const OrderPage = () => {
   return (
@@ -16,8 +15,8 @@ const OrderPage = () => {
             </Button>
           </Link>
         </Stack>
+        <OrderTab />
         {/* table below <OrderReport /> */}
-        <PendingOrders />
       </Grid>
     </div>
   );

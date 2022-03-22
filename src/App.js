@@ -14,6 +14,9 @@ import AddCategory from "./Components/Category/AddCategory";
 import CategoryPage from "./Pages/CategoryPage/categoryPage";
 import EditCategory from "./Components/Category/editCategory";
 
+import PendingOrders from "./Components/OrderTable/PendingOrders";
+import DeliveredOrders from "./Components/OrderTable/DeliveredOrders";
+
 import History from "./Components/HistoryofProducts/history";
 
 //layout
@@ -128,6 +131,28 @@ function App() {
                   <PrivateRoute>
                     <Layout>
                       <OrderPage />
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+
+              <Route
+                path="/Pending-Orders"
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <PendingOrders />
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+
+              <Route
+                path="/Delivered-Orders"
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <DeliveredOrders />
                     </Layout>
                   </PrivateRoute>
                 }

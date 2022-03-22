@@ -133,7 +133,7 @@ const AddProducts = () => {
 
   return (
     <div>
-      <Grid item xs={1}>
+      <Grid item xs={1} style={{ margin: "12px" }}>
         <ButtonForm onClick={() => navigate(-1)}>go back</ButtonForm>
       </Grid>
 

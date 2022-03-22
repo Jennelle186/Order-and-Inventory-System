@@ -3,6 +3,8 @@ import { Stack, Button, Grid, ThemeProvider, createTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import ProductTable from "../../Components/ProductTable/ProductTable";
 
+import History from "../../Components/HistoryofProducts/history";
+
 const ProductsPage = () => {
   return (
     <div>
@@ -27,6 +29,7 @@ const ProductsPage = () => {
           {" "}
           <ProductTable />
         </ThemeProvider>
+        {/* <History /> */}
       </Grid>
     </div>
   );

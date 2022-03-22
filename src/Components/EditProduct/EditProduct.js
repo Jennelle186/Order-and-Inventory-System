@@ -7,6 +7,7 @@ import {
   deleteField,
   collection,
   getDocs,
+  addDoc,
 } from "firebase/firestore";
 import { db } from "../../Firebase/utils";
 
@@ -155,6 +156,8 @@ const EditProduct = (props) => {
       });
     }
 
+    // historyStore(); // saving this in a subcollection "history"
+
     console.log("done");
   };
 
@@ -166,6 +169,28 @@ const EditProduct = (props) => {
     });
     alert(" Deleted");
     window.location.reload();
+  };
+
+  //storing it in the subcollection history
+  const historyStore = async () => {
+    try {
+      const historyRef = await doc(db, "products", state);
+      const colRef = collection(historyRef, "history");
+      product.map(({ prodName, price, colorMap, size, cat }) => {
+        addDoc(colRef, {
+          prodName,
+          price,
+          colorMap,
+          size,
+          cat,
+          createdDate: new Date(),
+        });
+      });
+
+      console.log("saved");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

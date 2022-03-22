@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import {
   Table,
@@ -8,46 +8,90 @@ import {
   TableHead,
   TableRow,
   List,
-  ListItem,
   ListItemText,
   Typography,
   TableFooter,
   ThemeProvider,
   createTheme,
+  Button,
 } from "@mui/material";
 
 import { db } from "../../Firebase/utils";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  doc,
+  updateDoc,
+  onSnapshot,
+} from "firebase/firestore";
 
 import Loading from "../Loading/loading";
 
-const OrderReport = () => {
+const PendingOrders = () => {
   const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  //   useEffect(() => {
+  //     let isMounted = true;
+
+  //     const getOrders = async () => {
+  //       const ordersRef = collection(db, "orders");
+  //       const q = query(ordersRef, where("orderStatus", "==", "Pending"));
+  //       const querySnapshot = await getDocs(q);
+  //       const arr = [];
+  //       querySnapshot.forEach((doc) => {
+  //         arr.push({
+  //           ...doc.data(),
+  //           id: doc.id,
+  //         });
+  //       });
+  //       if (isMounted) {
+  //         setOrders(arr);
+  //         setLoading(true);
+  //       }
+  //     };
+
+  //     getOrders().catch((err) => {
+  //       if (!isMounted) return;
+  //       console.error("failed to fetch data", err);
+  //     });
+
+  //     return () => {
+  //       isMounted = false;
+  //     };
+  //   }, []);
+
   useEffect(() => {
     let isMounted = true;
 
-    const getOrders = async () => {
-      // const querySnapshot = await getDocs(collection(db, "orders"));
-      const ordersRef = collection(db, "orders");
-      const q = query(ordersRef, orderBy("orderCreatedAt", "desc"));
-      const querySnapshot = await getDocs(q);
-      const arr = [];
-      querySnapshot.forEach((doc) => {
-        arr.push({
-          ...doc.data(),
-          id: doc.id,
+    const retrieve = async () => {
+      const q = query(
+        collection(db, "orders"),
+        orderBy("orderCreatedAt", "desc")
+      );
+      await onSnapshot(q, (snapshot) => {
+        console.log("Order Status:");
+        const arr = [];
+        snapshot.forEach((userSnapshot) => {
+          console.log(userSnapshot.data());
+          arr.push({
+            ...userSnapshot.data(),
+            id: userSnapshot.id,
+          });
         });
+        if (isMounted) {
+          setOrders(arr);
+          setLoading(true);
+          console.log(arr, "orders status 1");
+        }
       });
-      if (isMounted) {
-        setOrders(arr);
-        setLoading(true);
-      }
     };
 
-    getOrders().catch((err) => {
+    retrieve().catch((err) => {
       if (!isMounted) return;
       console.error("failed to fetch data", err);
     });
@@ -56,6 +100,11 @@ const OrderReport = () => {
       isMounted = false;
     };
   }, []);
+
+  //this one is using the filter to get orders with an orderStatus of Pending
+  const filter = orders.filter(
+    (v) => v.orderStatus !== undefined && v.orderStatus == "Pending"
+  );
 
   const columns = [
     {
@@ -180,18 +229,6 @@ const OrderReport = () => {
         },
       },
     },
-    // {
-    //   name: "orderCreatedAt",
-    //   label: "Ordered date",
-    //   options: {
-    //     filter: true,
-    //     sort: true,
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       return new Date(value.seconds * 1000).toDateString();
-    //     },
-    //   },
-    // },
-
     {
       name: "number",
       label: "Phone Number",
@@ -248,7 +285,33 @@ const OrderReport = () => {
         display: false,
       },
     },
+    {
+      name: "Set Order Status",
+      options: {
+        filter: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <Button onClick={(e) => updateOrderStatus(tableMeta.rowData[0])}>
+              Delivered
+            </Button>
+          );
+        },
+      },
+    },
   ];
+
+  const updateOrderStatus = async (id) => {
+    try {
+      const orderRef = doc(db, "orders", id);
+
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(orderRef, {
+        orderStatus: "Delivered",
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   function handleTableChange(action, tableState) {
     // console.log("handleTableChange:... ", tableState.displayData);
@@ -321,7 +384,6 @@ const OrderReport = () => {
       );
     },
   };
-
   return (
     <div>
       {loading ? (
@@ -335,9 +397,9 @@ const OrderReport = () => {
           </Typography>
           <ThemeProvider theme={createTheme()}>
             <MUIDataTable
-              title={"List of Orders Reports"}
+              title={"Pending Orders"}
               columns={columns}
-              data={orders}
+              data={filter}
               options={options}
             />
           </ThemeProvider>
@@ -351,4 +413,4 @@ const OrderReport = () => {
   );
 };
 
-export default OrderReport;
+export default PendingOrders;

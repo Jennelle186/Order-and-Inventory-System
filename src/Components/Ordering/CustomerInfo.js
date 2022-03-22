@@ -95,6 +95,7 @@ const CustomerInfo = ({ cartItems, totalAmount, handleCartClearance }) => {
         number,
         instructions,
         orderCreatedAt: new Date(),
+        orderStatus: "Pending",
       });
       updateData();
       clearInfo();

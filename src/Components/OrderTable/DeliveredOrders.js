@@ -32,7 +32,11 @@ const OrderReport = () => {
     const getOrders = async () => {
       // const querySnapshot = await getDocs(collection(db, "orders"));
       const ordersRef = collection(db, "orders");
-      const q = query(ordersRef, where("orderStatus", "==", "Delivered"));
+      const q = query(
+        ordersRef,
+        where("orderStatus", "==", "Delivered"),
+        orderBy("orderCreatedAt", "desc")
+      );
       const querySnapshot = await getDocs(q);
       const arr = [];
       querySnapshot.forEach((doc) => {

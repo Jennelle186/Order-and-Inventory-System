@@ -18,6 +18,7 @@ import {
 
 import { db } from "../../Firebase/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import BoxDashboards from "../BoxDashboard/BoxDashboard";
 
 import Loading from "../Loading/loading";
 
@@ -322,15 +323,16 @@ const OrderReport = () => {
 
   return (
     <div>
+      <BoxDashboards totalAmount={total} />
       {loading ? (
         <>
           {" "}
-          <Typography variant="subtitle1">
+          {/* <Typography variant="subtitle1">
             Total amount : ₱{" "}
             {total.toLocaleString(navigator.language, {
               minimumFractionDigits: 2,
             })}
-          </Typography>
+          </Typography> */}
           <ThemeProvider theme={createTheme()}>
             <MUIDataTable
               title={"List of Orders Reports"}

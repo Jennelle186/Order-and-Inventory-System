@@ -26,6 +26,7 @@ import {
   doc,
   updateDoc,
   onSnapshot,
+  increment,
 } from "firebase/firestore";
 
 import Loading from "../Loading/loading";
@@ -71,6 +72,7 @@ const PendingOrders = () => {
     const retrieve = async () => {
       const q = query(
         collection(db, "orders"),
+        where("orderStatus", "==", "Pending"),
         orderBy("orderCreatedAt", "desc")
       );
       await onSnapshot(q, (snapshot) => {
@@ -99,9 +101,9 @@ const PendingOrders = () => {
   }, []);
 
   //this one is using the filter to get orders with an orderStatus of Pending
-  const filter = orders.filter(
-    (v) => v.orderStatus !== undefined && v.orderStatus == "Pending"
-  );
+  // const filter = orders.filter(
+  //   (v) => v.orderStatus !== undefined && v.orderStatus == "Pending"
+  // );
 
   const columns = [
     {
@@ -297,6 +299,7 @@ const PendingOrders = () => {
     },
   ];
 
+  //update the order status to delivered
   const updateOrderStatus = async (id) => {
     try {
       const orderRef = doc(db, "orders", id);
@@ -305,10 +308,21 @@ const PendingOrders = () => {
       await updateDoc(orderRef, {
         orderStatus: "Delivered",
       });
+
+      updateData();
     } catch (err) {
       console.log(err);
     }
   };
+
+  //update the document of the counts for the # of delivered orders
+  //not sure with this yet
+  async function updateData() {
+    const docRef = doc(db, "orders", "counts");
+    await updateDoc(docRef, {
+      [`deliveredOrder`]: increment(1),
+    });
+  }
 
   function handleTableChange(action, tableState) {
     // console.log("handleTableChange:... ", tableState.displayData);
@@ -396,7 +410,7 @@ const PendingOrders = () => {
             <MUIDataTable
               title={"Pending Orders"}
               columns={columns}
-              data={filter}
+              data={orders}
               options={options}
             />
           </ThemeProvider>

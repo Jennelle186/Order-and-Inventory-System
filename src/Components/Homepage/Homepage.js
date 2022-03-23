@@ -10,7 +10,7 @@ const Homepage = () => {
   return (
     <>
       <Header />
-      <BoxDashboards />
+
       <Grid style={{ padding: "1rem" }}>
         <OrderReport />
       </Grid>

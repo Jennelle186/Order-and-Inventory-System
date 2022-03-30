@@ -11,13 +11,13 @@ import {
   collectionGroup,
   query,
   getDoc,
+  orderBy,
 } from "firebase/firestore";
 
 const History = (props) => {
   const [product, setProduct] = useState([]);
   const { state } = useLocation(); //document ID here & not sure with this yet
   const navigate = useNavigate();
-  console.log(state, "document ID");
 
   //fetching the products document
   //other solution for the history is that upon clicking on a product, this will show all the history of the product
@@ -26,7 +26,10 @@ const History = (props) => {
     let isMounted = true;
 
     const getProducts = async () => {
-      const listProducts = query(collectionGroup(db, "history"));
+      const listProducts = query(
+        collectionGroup(db, "history"),
+        orderBy("createdDate", "desc")
+      );
       const querySnapshot = await getDocs(listProducts);
       const arr = [];
       querySnapshot.forEach((doc) => {
@@ -121,8 +124,6 @@ const History = (props) => {
     },
   ];
 
-  console.log(JSON.stringify(product));
-
   const options = {
     filter: true,
     selectableRows: "none",
@@ -131,15 +132,15 @@ const History = (props) => {
   return (
     <div>
       <Grid style={{ padding: "1rem" }}>
-        <Stack direction="row" justifyContent="start">
+        {/* <Stack direction="row" justifyContent="start">
           <Grid item xs={1}>
             <ButtonForm onClick={() => navigate(-1)}>go back</ButtonForm>
           </Grid>{" "}
-        </Stack>
+        </Stack> */}
 
         <ThemeProvider theme={createTheme()}>
           <MUIDataTable
-            title={"History"}
+            title={"History of the Products"}
             options={options}
             columns={columns}
             data={product}

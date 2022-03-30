@@ -19,6 +19,7 @@ import {
 import { db } from "../../Firebase/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import BoxDashboards from "../BoxDashboard/BoxDashboard";
+import StocksAlert from "../StocksAlerts/StocksAlert";
 
 import Loading from "../Loading/loading";
 
@@ -324,6 +325,8 @@ const OrderReport = () => {
   return (
     <div>
       <BoxDashboards totalAmount={total} />
+      <StocksAlert />
+      <br />
       {loading ? (
         <>
           {" "}

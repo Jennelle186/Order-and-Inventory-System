@@ -156,7 +156,7 @@ const EditProduct = (props) => {
       });
     }
 
-    // historyStore(); // saving this in a subcollection "history"
+    historyStore(); // saving this in a subcollection "history"
 
     console.log("done");
   };
@@ -195,7 +195,7 @@ const EditProduct = (props) => {
 
   return (
     <div>
-      <Stack direction="row" justifyContent="start">
+      <Stack direction="row" justifyContent="start" style={{ margin: "1rem" }}>
         <Grid item xs={1}>
           <ButtonForm onClick={() => navigate(-1)}>go back</ButtonForm>
         </Grid>{" "}

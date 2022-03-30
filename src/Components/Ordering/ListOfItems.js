@@ -13,6 +13,7 @@ import {
   TablePagination,
   Typography,
   TextField,
+  InputAdornment,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -157,9 +158,17 @@ const ListItems = ({
             <br />
             <TextField
               type="number"
-              label="Discount in Percentage"
+              label="Discount"
               value={discount}
               onChange={(e) => setDiscount(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start"> ₱</InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="start">.00</InputAdornment>
+                ),
+              }}
             />
             <Typography>
               Total amount: ₱{" "}

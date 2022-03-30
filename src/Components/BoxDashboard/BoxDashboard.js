@@ -13,6 +13,8 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 
+import { useNavigate } from "react-router-dom";
+
 import { db } from "../../Firebase/utils";
 import {
   query,
@@ -22,10 +24,13 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import StocksAlert from "../StocksAlerts/StocksAlert";
 
 const BoxDashboards = ({ totalAmount }) => {
+  const navigate = useNavigate();
   const [pending, setPending] = useState();
   const [delivered, setDelivered] = useState();
+  const [product, setProduct] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -55,12 +60,31 @@ const BoxDashboards = ({ totalAmount }) => {
       }
     };
 
+    const getProducts = async () => {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      const arr = [];
+      querySnapshot.forEach((doc) => {
+        arr.push({
+          ...doc.data(),
+          id: doc.id,
+        });
+      });
+      if (isMounted) {
+        setProduct(arr);
+      }
+    };
+
     getPending().catch((err) => {
       if (!isMounted) return;
       console.error("failed to fetch data", err);
     });
 
     getDelivered().catch((err) => {
+      if (!isMounted) return;
+      console.error("failed to fetch data", err);
+    });
+
+    getProducts().catch((err) => {
       if (!isMounted) return;
       console.error("failed to fetch data", err);
     });
@@ -79,11 +103,15 @@ const BoxDashboards = ({ totalAmount }) => {
   //   setPending(querySnapshot.docs.length);
   // }, []);
 
+  const newProduct = product.filter((item) => {
+    return Object.values(item.colorMap).every((color) => color < 10);
+  });
+
   return (
     <Container style={{ marginTop: "1rem", marginBottom: "1rem" }}>
       <Box sx={{ "& h1": { m: 0 } }}>
         <Grid container spacing={2} justify="flex-start">
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
             <Link to="/Pending-Orders" style={{ textDecoration: "none" }}>
               <Card
                 sx={{
@@ -106,7 +134,7 @@ const BoxDashboards = ({ totalAmount }) => {
               </Card>
             </Link>
           </Grid>
-          <Grid item xs={12} sm={6} md={4} order={{ xs: 3, sm: 2 }}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
             <Link to="/Delivered-Orders" style={{ textDecoration: "none" }}>
               <Card
                 sx={{
@@ -129,7 +157,7 @@ const BoxDashboards = ({ totalAmount }) => {
               </Card>
             </Link>
           </Grid>
-          <Grid item xs={12} sm={6} md={4} order={{ xs: 2, sm: 3 }}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
             <Card
               sx={{
                 ":hover": {
@@ -146,6 +174,30 @@ const BoxDashboards = ({ totalAmount }) => {
                       minimumFractionDigits: 2,
                     })}
                   </Typography>
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Card
+              sx={{
+                ":hover": {
+                  boxShadow: 20, // theme.shadows[20]
+                },
+              }}
+            >
+              <CardContent>
+                <Stack direction="row" spacing={2}>
+                  <PointOfSaleIcon color="success" fontSize="large" />
+                  <Typography
+                    variant={"h6"}
+                    gutterBottom
+                    onClick={() => navigate("/stocks", { state: newProduct })}
+                  >
+                    {newProduct.length} for Restocks
+                  </Typography>
+
+                  {/* use a navigate here  */}
                 </Stack>
               </CardContent>
             </Card>

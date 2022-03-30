@@ -9,48 +9,13 @@ import {
   Grid,
   ListItemIcon,
 } from "@mui/material";
-import { useNavigate, Link } from "react-router-dom";
-
-//firebase
-import { db } from "../../Firebase/utils";
-import { collection, getDocs } from "firebase/firestore";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const StocksAlert = () => {
-  const [product, setProduct] = useState([]);
+  const { state } = useLocation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const getProducts = async () => {
-      const querySnapshot = await getDocs(collection(db, "products"));
-      const arr = [];
-      querySnapshot.forEach((doc) => {
-        arr.push({
-          ...doc.data(),
-          id: doc.id,
-        });
-      });
-      if (isMounted) {
-        setProduct(arr);
-      }
-    };
-
-    getProducts().catch((err) => {
-      if (!isMounted) return;
-      console.error("failed to fetch data", err);
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const newProduct = product.filter((item) => {
-    return Object.values(item.colorMap).every((color) => color < 10);
-  });
 
   return (
     <Container>
@@ -60,8 +25,8 @@ const StocksAlert = () => {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {product &&
-          product.map((item, i) => {
+        {state &&
+          state.map((item, i) => {
             const obj = item.colorMap;
 
             for (let x in obj) {

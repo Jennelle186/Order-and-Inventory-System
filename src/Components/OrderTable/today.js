@@ -325,7 +325,6 @@ const OrderReport = () => {
   return (
     <div>
       <BoxDashboards totalAmount={total} />
-      <StocksAlert />
       <br />
       {loading ? (
         <>

@@ -142,7 +142,8 @@ const Ordering = () => {
     0
   );
   const [discount, setDiscount] = useState(0);
-  let totalAmount = Number(amount) - (Number(amount) * Number(discount)) / 100;
+  // let totalAmount = Number(amount) - (Number(amount) * Number(discount)) / 100; //percentage
+  let totalAmount = Number(amount) - Number(discount); //just the amount
 
   return (
     <div>

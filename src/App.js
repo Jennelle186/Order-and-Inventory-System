@@ -19,6 +19,8 @@ import DeliveredOrders from "./Components/OrderTable/DeliveredOrders";
 
 import History from "./Components/HistoryofProducts/history";
 
+import StocksAlert from "./Components/StocksAlerts/StocksAlert";
+
 //layout
 import MainLayout from "./Components/MainLayout/MainLayout";
 import Layout from "./Components/Layout/Layout";
@@ -120,6 +122,17 @@ function App() {
                   <PrivateRoute>
                     <Layout>
                       <EditProduct />
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+
+              <Route
+                path="/stocks"
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <StocksAlert />
                     </Layout>
                   </PrivateRoute>
                 }

@@ -14,6 +14,12 @@ import {
   Typography,
   TextField,
   InputAdornment,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  Grid,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -27,6 +33,10 @@ const ListItems = ({
   discount,
   setDiscount,
   amount,
+  rushFee,
+  setRushFee,
+  stateOrder,
+  handleState,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +56,7 @@ const ListItems = ({
     setPage(0);
   };
   //-------------------------------------------------------
+
   return (
     <div>
       <Typography variant="subtitle1">List of Orders</Typography>
@@ -156,6 +167,46 @@ const ListItems = ({
               })}
             </Typography>
             <br />
+            <FormControl>
+              <FormLabel id="demo-controlled-radio-buttons-group">
+                Regular or Rush
+              </FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={stateOrder}
+                onChange={handleState}
+              >
+                <FormControlLabel
+                  value="Regular"
+                  control={<Radio />}
+                  label="Regular"
+                />
+                <FormControlLabel
+                  value="Rush"
+                  control={<Radio />}
+                  label="Rush"
+                />
+              </RadioGroup>
+            </FormControl>
+            {stateOrder === "Rush" && (
+              <TextField
+                label="Rush Fee"
+                type="number"
+                value={rushFee}
+                onChange={(e) => setRushFee(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start"> ₱</InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="start">.00</InputAdornment>
+                  ),
+                }}
+              />
+            )}
+            <br /> <br />
             <TextField
               type="number"
               label="Discount"

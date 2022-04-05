@@ -18,9 +18,17 @@ import {
   increment,
   doc,
 } from "firebase/firestore";
+import { LocalizationProvider } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import { db } from "../../Firebase/utils";
 
-const CustomerInfo = ({ cartItems, totalAmount, handleCartClearance }) => {
+const CustomerInfo = ({
+  cartItems,
+  totalAmount,
+  handleCartClearance,
+  stateOrder,
+}) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [houseNo, setHouseNo] = useState("");
@@ -29,6 +37,13 @@ const CustomerInfo = ({ cartItems, totalAmount, handleCartClearance }) => {
   const [landMark, setLandMark] = useState("");
   const [number, setNumber] = useState("");
   const [instructions, setInstructions] = useState("");
+
+  // delivery date---------------------------------------------
+  const [deliveryDate, setDeliveryDate] = useState(new Date());
+  const handleChange = (newValue) => {
+    setDeliveryDate(newValue);
+  };
+  //-----------------------------------------------------------
 
   //for the alert------
   const [open, setOpen] = useState(false);
@@ -78,6 +93,7 @@ const CustomerInfo = ({ cartItems, totalAmount, handleCartClearance }) => {
     setLandMark("");
     setInstructions("");
     setNumber("");
+    setDeliveryDate("");
   };
 
   const handleSubmit = async (e) => {
@@ -96,6 +112,8 @@ const CustomerInfo = ({ cartItems, totalAmount, handleCartClearance }) => {
         instructions,
         orderCreatedAt: new Date(),
         orderStatus: "Pending",
+        stateOrder,
+        deliveryDate,
       });
       updateData();
       clearInfo();
@@ -159,7 +177,10 @@ const CustomerInfo = ({ cartItems, totalAmount, handleCartClearance }) => {
                   }}
                 />
               </Grid>
-
+              <Grid item xs={12}>
+                <Typography>Order Details</Typography>
+                <Divider />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   type="text"
@@ -170,6 +191,20 @@ const CustomerInfo = ({ cartItems, totalAmount, handleCartClearance }) => {
                   value={instructions}
                   onChange={(e) => setInstructions(e.target.value)}
                 />
+              </Grid>
+
+              <Grid item xs={12}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DesktopDatePicker
+                    label="Delivery Date"
+                    inputFormat="MM/dd/yyyy"
+                    value={deliveryDate}
+                    onChange={handleChange}
+                    renderInput={(params) => (
+                      <TextField {...params} fullWidth />
+                    )}
+                  />
+                </LocalizationProvider>
               </Grid>
             </Grid>
           </Grid>

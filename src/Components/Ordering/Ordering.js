@@ -142,8 +142,23 @@ const Ordering = () => {
     0
   );
   const [discount, setDiscount] = useState(0);
+  const [rushFee, setRushFee] = useState(0);
   // let totalAmount = Number(amount) - (Number(amount) * Number(discount)) / 100; //percentage
-  let totalAmount = Number(amount) - Number(discount); //just the amount
+  let totalAmount = Number(amount) + Number(rushFee) - Number(discount); //just the amount
+
+  //rush or regular-------------------------------------------
+  const [stateOrder, setOrderState] = useState("Regular");
+
+  const handleState = (event) => {
+    if (event.target.value === "Regular") {
+      setRushFee(0);
+    }
+    setOrderState(event.target.value);
+  };
+
+  console.log(rushFee, "rush fee");
+
+  //--------------------------------------------------------------
 
   return (
     <div>
@@ -158,8 +173,9 @@ const Ordering = () => {
       </CardComponent> */}
       <Container>
         <Card style={{ marginTop: "1rem" }} elevation={5}>
-          <CardHeader title="Customer Information" />
+          <CardHeader title="Customer and Order Information" />
           <CustomerInfo
+            stateOrder={stateOrder}
             cartItems={cartItems}
             totalAmount={totalAmount}
             handleCartClearance={handleCartClearance}
@@ -253,10 +269,14 @@ const Ordering = () => {
               handleCartClearance={handleCartClearance}
               handleRemove={handleRemove}
               handleAdd={handleAdd}
+              rushFee={rushFee}
+              setRushFee={setRushFee}
               discount={discount}
               amount={amount}
               setDiscount={setDiscount}
               totalAmount={totalAmount}
+              stateOrder={stateOrder}
+              handleState={handleState}
             />
           </Grid>
         </Stack>

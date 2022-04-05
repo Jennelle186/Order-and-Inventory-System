@@ -237,6 +237,15 @@ const PendingOrders = () => {
       },
     },
     {
+      name: "stateOrder",
+      label: "Regular or rush",
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+
+    {
       name: "orderCreatedAt",
       label: "Month",
       options: {

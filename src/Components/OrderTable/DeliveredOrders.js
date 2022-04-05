@@ -194,6 +194,14 @@ const OrderReport = () => {
       },
     },
     {
+      name: "stateOrder",
+      label: "Regular or rush",
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
       name: "orderCreatedAt",
       label: "Month",
       options: {
@@ -239,6 +247,17 @@ const OrderReport = () => {
         filter: false,
         sort: true,
         display: false,
+      },
+    },
+    {
+      name: "deliveryDate",
+      label: "Delivery Date",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return new Date(value?.seconds * 1000).toDateString();
+        },
       },
     },
   ];

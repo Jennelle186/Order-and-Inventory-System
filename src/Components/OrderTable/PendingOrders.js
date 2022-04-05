@@ -285,6 +285,17 @@ const PendingOrders = () => {
       },
     },
     {
+      name: "deliveryDate",
+      label: "Delivery Date",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return new Date(value?.seconds * 1000).toDateString();
+        },
+      },
+    },
+    {
       name: "instructions",
       label: "Instructions",
       options: {
@@ -395,7 +406,8 @@ const PendingOrders = () => {
                 </TableBody>
                 <TableFooter>
                   {" "}
-                  <Typography> Instructions: {rowData[14]}</Typography>
+                  {console.log(rowData)}
+                  <Typography> Instructions: {rowData[16]}</Typography>
                 </TableFooter>
               </Table>
             </TableContainer>

@@ -156,8 +156,6 @@ const Ordering = () => {
     setOrderState(event.target.value);
   };
 
-  console.log(rushFee, "rush fee");
-
   //--------------------------------------------------------------
 
   return (

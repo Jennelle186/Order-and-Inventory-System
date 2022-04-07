@@ -93,7 +93,7 @@ const CustomerInfo = ({
     setLandMark("");
     setInstructions("");
     setNumber("");
-    setDeliveryDate("");
+    setDeliveryDate();
   };
 
   const handleSubmit = async (e) => {

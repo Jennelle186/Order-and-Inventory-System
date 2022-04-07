@@ -12,6 +12,8 @@ import {
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import { useNavigate } from "react-router-dom";
 
@@ -29,6 +31,7 @@ import StocksAlert from "../StocksAlerts/StocksAlert";
 const BoxDashboards = ({ totalAmount }) => {
   const navigate = useNavigate();
   const [pending, setPending] = useState();
+  const [readyDelivery, setReadyDelivery] = useState();
   const [delivered, setDelivered] = useState();
   const [product, setProduct] = useState([]);
 
@@ -43,6 +46,20 @@ const BoxDashboards = ({ totalAmount }) => {
 
       if (isMounted) {
         setPending(querySnapshot.docs.length);
+      }
+    };
+
+    const getReadyDelivery = async () => {
+      const ordersRef = collection(db, "orders");
+      const q = query(
+        ordersRef,
+        where("orderStatus", "==", "Ready to be Delivered")
+      );
+      const querySnapshot = await getDocs(q);
+      // console.log(querySnapshot.docs.length, "pending orders");
+
+      if (isMounted) {
+        setReadyDelivery(querySnapshot.docs.length);
       }
     };
 
@@ -79,6 +96,11 @@ const BoxDashboards = ({ totalAmount }) => {
       console.error("failed to fetch data", err);
     });
 
+    getReadyDelivery().catch((err) => {
+      if (!isMounted) return;
+      console.error("failed to fetch data", err);
+    });
+
     getDelivered().catch((err) => {
       if (!isMounted) return;
       console.error("failed to fetch data", err);
@@ -110,7 +132,13 @@ const BoxDashboards = ({ totalAmount }) => {
   return (
     <Container style={{ marginTop: "1rem", marginBottom: "1rem" }}>
       <Box sx={{ "& h1": { m: 0 } }}>
-        <Grid container spacing={2} justify="flex-start">
+        <Grid
+          container
+          wrap="nowrap"
+          sx={{ flexDirection: { xs: "column", md: "row" } }}
+          spacing={2}
+          justify="flex-start"
+        >
           <Grid item xs={12} sm={6} md={4} lg={3}>
             <Link to="/Pending-Orders" style={{ textDecoration: "none" }}>
               <Card
@@ -135,7 +163,10 @@ const BoxDashboards = ({ totalAmount }) => {
             </Link>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Link to="/Delivered-Orders" style={{ textDecoration: "none" }}>
+            <Link
+              to="/Ready-to-be-delivered"
+              style={{ textDecoration: "none" }}
+            >
               <Card
                 sx={{
                   ":hover": {
@@ -146,8 +177,31 @@ const BoxDashboards = ({ totalAmount }) => {
                 <CardContent>
                   <Stack direction="row" spacing={2}>
                     <LocalShippingIcon
+                      style={{ color: "#FDDA0D" }}
                       fontSize="large"
-                      style={{ color: "orange" }}
+                    />
+                    <Typography variant={"h6"} gutterBottom>
+                      {readyDelivery} Ready for Delivery
+                    </Typography>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Link>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Link to="/Delivered-Orders" style={{ textDecoration: "none" }}>
+              <Card
+                sx={{
+                  ":hover": {
+                    boxShadow: 20, // theme.shadows[20]
+                  },
+                }}
+              >
+                <CardContent>
+                  <Stack direction="row" spacing={2}>
+                    <FactCheckIcon
+                      fontSize="large"
+                      style={{ color: "green" }}
                     />
                     <Typography variant={"h6"} gutterBottom>
                       {delivered} Delivered Orders
@@ -188,13 +242,16 @@ const BoxDashboards = ({ totalAmount }) => {
             >
               <CardContent>
                 <Stack direction="row" spacing={2}>
-                  <PointOfSaleIcon color="success" fontSize="large" />
+                  <WarningAmberIcon
+                    fontSize="large"
+                    style={{ color: "#FF5F1F" }}
+                  />
                   <Typography
                     variant={"h6"}
                     gutterBottom
                     onClick={() => navigate("/stocks", { state: newProduct })}
                   >
-                    {newProduct.length} for Restocks
+                    {newProduct.length} products for Restocks
                   </Typography>
 
                   {/* use a navigate here  */}

@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 
 import PendingOrders from "../../Components/OrderTable/PendingOrders";
 import DeliveredOrders from "../../Components/OrderTable/DeliveredOrders";
+import ReadyToBeDelivered from "../../Components/OrderTable/ReadyToBeDelivered";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,13 +57,17 @@ const OrderTab = () => {
           aria-label="basic tabs example"
         >
           <Tab label="Pending" {...a11yProps(0)} />
-          <Tab label="Delivered" {...a11yProps(1)} />
+          <Tab label="Ready to be Delivered" {...a11yProps(1)} />
+          <Tab label="Delivered" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
         <PendingOrders />
       </TabPanel>
       <TabPanel value={value} index={1}>
+        <ReadyToBeDelivered />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
         <DeliveredOrders />
       </TabPanel>
     </Box>

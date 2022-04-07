@@ -31,40 +31,10 @@ import {
 
 import Loading from "../Loading/loading";
 
-const PendingOrders = () => {
+const ReadyToBeDelivered = () => {
   const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  //   useEffect(() => {
-  //     let isMounted = true;
-
-  //     const getOrders = async () => {
-  //       const ordersRef = collection(db, "orders");
-  //       const q = query(ordersRef, where("orderStatus", "==", "Pending"));
-  //       const querySnapshot = await getDocs(q);
-  //       const arr = [];
-  //       querySnapshot.forEach((doc) => {
-  //         arr.push({
-  //           ...doc.data(),
-  //           id: doc.id,
-  //         });
-  //       });
-  //       if (isMounted) {
-  //         setOrders(arr);
-  //         setLoading(true);
-  //       }
-  //     };
-
-  //     getOrders().catch((err) => {
-  //       if (!isMounted) return;
-  //       console.error("failed to fetch data", err);
-  //     });
-
-  //     return () => {
-  //       isMounted = false;
-  //     };
-  //   }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -72,7 +42,7 @@ const PendingOrders = () => {
     const retrieve = async () => {
       const q = query(
         collection(db, "orders"),
-        where("orderStatus", "==", "Pending"),
+        where("orderStatus", "==", "Ready to be Delivered"),
         orderBy("orderCreatedAt", "desc")
       );
       await onSnapshot(q, (snapshot) => {
@@ -99,11 +69,6 @@ const PendingOrders = () => {
       isMounted = false;
     };
   }, []);
-
-  //this one is using the filter to get orders with an orderStatus of Pending
-  // const filter = orders.filter(
-  //   (v) => v.orderStatus !== undefined && v.orderStatus == "Pending"
-  // );
 
   const columns = [
     {
@@ -311,7 +276,7 @@ const PendingOrders = () => {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <Button onClick={(e) => updateOrderStatus(tableMeta.rowData[0])}>
-              Ready to be Delivered
+              Delivered
             </Button>
           );
         },
@@ -326,10 +291,10 @@ const PendingOrders = () => {
 
       // Set the "capital" field of the city 'DC'
       await updateDoc(orderRef, {
-        orderStatus: "Ready to be Delivered",
+        orderStatus: "Delivered",
       });
 
-      // updateData();
+      updateData();
     } catch (err) {
       console.log(err);
     }
@@ -337,12 +302,12 @@ const PendingOrders = () => {
 
   //update the document of the counts for the # of delivered orders
   //not sure with this yet
-  // async function updateData() {
-  //   const docRef = doc(db, "orders", "counts");
-  //   await updateDoc(docRef, {
-  //     [`deliveredOrder`]: increment(1),
-  //   });
-  // }
+  async function updateData() {
+    const docRef = doc(db, "orders", "counts");
+    await updateDoc(docRef, {
+      [`deliveredOrder`]: increment(1),
+    });
+  }
 
   function handleTableChange(action, tableState) {
     // console.log("handleTableChange:... ", tableState.displayData);
@@ -429,7 +394,7 @@ const PendingOrders = () => {
           </Typography>
           <ThemeProvider theme={createTheme()}>
             <MUIDataTable
-              title={"Pending Orders"}
+              title={"Ready to be Delivered Orders"}
               columns={columns}
               data={orders}
               options={options}
@@ -445,4 +410,4 @@ const PendingOrders = () => {
   );
 };
 
-export default PendingOrders;
+export default ReadyToBeDelivered;

@@ -15,6 +15,7 @@ import CategoryPage from "./Pages/CategoryPage/categoryPage";
 import EditCategory from "./Components/Category/editCategory";
 
 import PendingOrders from "./Components/OrderTable/PendingOrders";
+import ReadyToBeDelivered from "./Components/OrderTable/ReadyToBeDelivered";
 import DeliveredOrders from "./Components/OrderTable/DeliveredOrders";
 
 import History from "./Components/HistoryofProducts/history";
@@ -37,7 +38,7 @@ function App() {
   const user = auth.currentUser;
   const navigate = useNavigate();
 
-  console.log(currentUser?.email);
+  // console.log(currentUser?.email);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -155,6 +156,17 @@ function App() {
                   <PrivateRoute>
                     <Layout>
                       <PendingOrders />
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+
+              <Route
+                path="/Ready-to-be-delivered"
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <ReadyToBeDelivered />
                     </Layout>
                   </PrivateRoute>
                 }

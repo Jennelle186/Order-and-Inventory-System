@@ -119,7 +119,7 @@ const CustomerInfo = ({
       clearInfo();
       handleCartClearance();
 
-      console.log("Document written with ID: ", docRef.id);
+      // console.log("Document written with ID: ", docRef.id);
     } catch (err) {
       console.log(err);
     }

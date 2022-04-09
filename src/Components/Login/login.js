@@ -81,7 +81,7 @@ const Login = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const auth = getAuth();
-    console.log(email, password, "1");
+    // console.log(email, password, "1");
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {

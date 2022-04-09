@@ -62,7 +62,7 @@ const AddCategory = () => {
       options: result,
     });
     setOpen(true);
-    console.log("Document written with ID: ", docRef.id);
+    // console.log("Document written with ID: ", docRef.id);
   };
 
   return (

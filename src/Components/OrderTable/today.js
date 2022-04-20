@@ -133,7 +133,7 @@ const OrderReport = () => {
       label: "Orders",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return value;
@@ -145,7 +145,7 @@ const OrderReport = () => {
       label: "Orders",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return Object.entries(
             value.reduce((prev, item) => {

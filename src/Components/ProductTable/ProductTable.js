@@ -65,7 +65,7 @@ const ProductTable = () => {
       name: "id",
       label: "System ID",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         display: false,
       },
@@ -99,7 +99,7 @@ const ProductTable = () => {
       name: "colorMap",
       label: "Color & Stocks",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           return Object.entries(value).map(([key, value]) => {
@@ -126,6 +126,7 @@ const ProductTable = () => {
     {
       name: "Edit",
       options: {
+        filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <Button
@@ -148,6 +149,7 @@ const ProductTable = () => {
     {
       name: "Delete",
       options: {
+        filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <Button

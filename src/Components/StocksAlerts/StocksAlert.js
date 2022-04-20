@@ -8,8 +8,11 @@ import {
   Typography,
   Grid,
   ListItemIcon,
+  ThemeProvider,
+  createTheme,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
+import MUIDataTable from "mui-datatables";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
@@ -17,9 +20,77 @@ const StocksAlert = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
+  const handleRowClick = (rowData, rowMeta) => {
+    console.log(rowData[0]);
+    navigate("/edit-products", { state: rowData[0] });
+  };
+
+  const options = {
+    filter: true,
+    selectableRows: "none",
+    responsive: "simple",
+    onRowClick: handleRowClick,
+  };
+
+  const columns = [
+    {
+      name: "id",
+      label: "System ID",
+      options: {
+        filter: false,
+        sort: true,
+        display: false,
+      },
+    },
+    {
+      name: "cat",
+      label: "Category",
+      options: {
+        filter: true,
+        sort: true,
+        display: true,
+      },
+    },
+    {
+      name: "size",
+      label: "Size",
+      options: {
+        filter: true,
+        sort: true,
+        display: true,
+      },
+    },
+    {
+      name: "prodName",
+      label: "Product Name",
+      options: {
+        filter: true,
+        sort: true,
+        display: true,
+      },
+    },
+    {
+      name: "colorMap",
+      label: "Color & Stocks",
+      options: {
+        filter: false,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return Object.entries(value).map(([key, value]) => {
+            return (
+              <p key={key}>
+                {key} - {value} pieces
+              </p>
+            );
+          });
+        },
+      },
+    },
+  ];
+
   return (
     <Container>
-      <Typography variant="subtitle1">Products that need restocking</Typography>
+      {/* <Typography variant="subtitle1">Products that need restocking</Typography>
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
@@ -67,7 +138,18 @@ const StocksAlert = () => {
               }
             }
           })}
-      </Grid>
+      </Grid> */}
+
+      <div style={{ marginTop: "1.5rem", margin: "12px" }}>
+        <ThemeProvider theme={createTheme()}>
+          <MUIDataTable
+            title={"Products for Restocks"}
+            options={options}
+            data={state}
+            columns={columns}
+          />
+        </ThemeProvider>
+      </div>
     </Container>
   );
 };

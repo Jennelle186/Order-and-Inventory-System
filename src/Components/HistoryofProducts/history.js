@@ -83,7 +83,7 @@ const History = (props) => {
       name: "colorMap",
       label: "Color & Stocks",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           return Object.entries(value).map(([key, value]) => {

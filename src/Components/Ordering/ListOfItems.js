@@ -37,6 +37,8 @@ const ListItems = ({
   setRushFee,
   stateOrder,
   handleState,
+  customizeFee,
+  setCustomizeFee,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -206,6 +208,21 @@ const ListItems = ({
                 }}
               />
             )}
+            <br /> <br />
+            <TextField
+              type="number"
+              label="Customization Fee"
+              value={customizeFee}
+              onChange={(e) => setCustomizeFee(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start"> ₱</InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="start">.00</InputAdornment>
+                ),
+              }}
+            />
             <br /> <br />
             <TextField
               type="number"

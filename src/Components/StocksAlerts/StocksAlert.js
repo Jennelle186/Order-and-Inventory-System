@@ -21,7 +21,6 @@ const StocksAlert = () => {
   const navigate = useNavigate();
 
   const handleRowClick = (rowData, rowMeta) => {
-    console.log(rowData[0]);
     navigate("/edit-products", { state: rowData[0] });
   };
 

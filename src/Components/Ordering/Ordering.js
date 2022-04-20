@@ -143,8 +143,10 @@ const Ordering = () => {
   );
   const [discount, setDiscount] = useState(0);
   const [rushFee, setRushFee] = useState(0);
+  const [customizeFee, setCustomizeFee] = useState(0);
   // let totalAmount = Number(amount) - (Number(amount) * Number(discount)) / 100; //percentage
-  let totalAmount = Number(amount) + Number(rushFee) - Number(discount); //just the amount
+  let totalAmount =
+    Number(amount) + Number(rushFee) + Number(customizeFee) - Number(discount); //just the amount
 
   //rush or regular-------------------------------------------
   const [stateOrder, setOrderState] = useState("Regular");
@@ -269,6 +271,8 @@ const Ordering = () => {
               handleAdd={handleAdd}
               rushFee={rushFee}
               setRushFee={setRushFee}
+              customizeFee={customizeFee}
+              setCustomizeFee={setCustomizeFee}
               discount={discount}
               amount={amount}
               setDiscount={setDiscount}

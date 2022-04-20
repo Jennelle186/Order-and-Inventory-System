@@ -110,7 +110,7 @@ const PendingOrders = () => {
       name: "id",
       label: "System ID", //or the order ID here
       options: {
-        filter: true,
+        filter: false,
         display: false,
       },
     },
@@ -240,7 +240,7 @@ const PendingOrders = () => {
       name: "stateOrder",
       label: "Regular or rush",
       options: {
-        filter: false,
+        filter: true,
         sort: true,
       },
     },
@@ -307,7 +307,7 @@ const PendingOrders = () => {
     {
       name: "Set Order Status",
       options: {
-        filter: true,
+        filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <Button onClick={(e) => updateOrderStatus(tableMeta.rowData[0])}>

@@ -221,7 +221,9 @@ const ListItems = ({
                 ),
               }}
             />
-            <Typography>
+            <br />
+            <br />
+            <Typography variant="h6">
               Total amount: ₱{" "}
               {totalAmount.toLocaleString(navigator.language, {
                 minimumFractionDigits: 2,
@@ -229,7 +231,7 @@ const ListItems = ({
             </Typography>
           </div>
 
-          <div>
+          <div style={{ marginTop: "12px" }}>
             {cartItems.length >= 1 && (
               <Button onClick={handleCartClearance} variant="outlined">
                 Clear Orders

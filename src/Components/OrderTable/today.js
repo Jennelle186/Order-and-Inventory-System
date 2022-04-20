@@ -64,7 +64,7 @@ const OrderReport = () => {
       name: "id",
       label: "System ID", //or the order ID here
       options: {
-        filter: true,
+        filter: false,
         display: false,
       },
     },
@@ -195,7 +195,7 @@ const OrderReport = () => {
       name: "stateOrder",
       label: "Regular or rush",
       options: {
-        filter: false,
+        filter: true,
         sort: true,
       },
     },

@@ -75,7 +75,7 @@ const ReadyToBeDelivered = () => {
       name: "id",
       label: "System ID", //or the order ID here
       options: {
-        filter: true,
+        filter: false,
         display: false,
       },
     },
@@ -205,7 +205,7 @@ const ReadyToBeDelivered = () => {
       name: "stateOrder",
       label: "Regular or rush",
       options: {
-        filter: false,
+        filter: true,
         sort: true,
       },
     },
@@ -272,7 +272,7 @@ const ReadyToBeDelivered = () => {
     {
       name: "Set Order Status",
       options: {
-        filter: true,
+        filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <Button onClick={(e) => updateOrderStatus(tableMeta.rowData[0])}>

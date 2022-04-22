@@ -125,9 +125,26 @@ const BoxDashboards = ({ totalAmount }) => {
   //   setPending(querySnapshot.docs.length);
   // }, []);
 
+  //this filter not working
   const newProduct = product.filter((item) => {
     return Object.values(item.colorMap).every((color) => color < 10);
   });
+
+  //use this for filtering the stocks less than 10
+  const result = product.reduce((r, o) => {
+    const colorMap = Object.entries(o.colorMap).filter(([, val]) => val <= 10);
+    if (colorMap.length) {
+      r.push({
+        colorMap: Object.fromEntries(colorMap),
+        prodName: o.prodName,
+        cat: o.cat,
+        id: o.id,
+        size: o.size,
+        price: o.price,
+      });
+    }
+    return r;
+  }, []);
 
   return (
     <Container style={{ marginTop: "1rem", marginBottom: "1rem" }}>
@@ -249,9 +266,9 @@ const BoxDashboards = ({ totalAmount }) => {
                   <Typography
                     variant={"h6"}
                     gutterBottom
-                    onClick={() => navigate("/stocks", { state: newProduct })}
+                    onClick={() => navigate("/stocks", { state: result })}
                   >
-                    {newProduct.length} products for Restocks
+                    {result.length} products for Restocks
                   </Typography>
 
                   {/* use a navigate here  */}

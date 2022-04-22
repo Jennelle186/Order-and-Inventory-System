@@ -208,7 +208,6 @@ const Ordering = () => {
                 ),
               }}
             />
-            {searchKey}
 
             {searchList.map((item, index) => (
               <List key={item.id + item.color}>

@@ -73,6 +73,7 @@ const ListItems = ({
                   <TableCell align="center"></TableCell>
                   <TableCell align="center">Color</TableCell>
                   <TableCell>Qty</TableCell>
+                  <TableCell>Price</TableCell>
                   <TableCell></TableCell>
 
                   <TableCell>Unit Price</TableCell>
@@ -112,6 +113,12 @@ const ListItems = ({
                             }
                           }}
                         />
+                      </TableCell>
+                      <TableCell>
+                        ₱{" "}
+                        {Number(item.price).toLocaleString(navigator.language, {
+                          minimumFractionDigits: 2,
+                        })}
                       </TableCell>
 
                       <TableCell align="right">

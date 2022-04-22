@@ -63,7 +63,8 @@ const CategoryTable = () => {
   const options = {
     filter: true,
     selectableRows: "none",
-    responsive: "simple",
+    download: false,
+    responsive: "standard",
   };
 
   const columns = [
@@ -135,7 +136,7 @@ const CategoryTable = () => {
   let sample = "Are you sure you want to delete this category?";
 
   return (
-    <div>
+    <div style={{ marginTop: "1rem" }}>
       {loading ? (
         <MUIDataTable
           title="List of categories"

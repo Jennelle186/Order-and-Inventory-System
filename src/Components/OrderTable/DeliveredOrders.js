@@ -64,7 +64,7 @@ const OrderReport = () => {
   const columns = [
     {
       name: "id",
-      label: "System ID", //or the order ID here
+      label: "Order ID", //or the order ID here
       options: {
         filter: false,
         display: false,
@@ -137,6 +137,7 @@ const OrderReport = () => {
         filter: false,
         sort: true,
         display: false,
+        viewColumns: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return value;
         },
@@ -281,6 +282,8 @@ const OrderReport = () => {
     selectableRows: "none",
     responsive: "vertical",
     expandableRows: true,
+    download: false,
+    jumpToPage: true,
     onTableChange: handleTableChange,
     onTableInit: handleTableChange,
     renderExpandableRow: (rowData, rowMeta) => {
@@ -347,7 +350,7 @@ const OrderReport = () => {
           </Typography>
           <ThemeProvider theme={createTheme()}>
             <MUIDataTable
-              title={"List of Orders Reports"}
+              title={"Delivered Orders"}
               columns={columns}
               data={orders}
               options={options}

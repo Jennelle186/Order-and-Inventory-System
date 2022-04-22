@@ -108,7 +108,7 @@ const PendingOrders = () => {
   const columns = [
     {
       name: "id",
-      label: "System ID", //or the order ID here
+      label: "Order ID", //or the order ID here
       options: {
         filter: false,
         display: false,
@@ -179,8 +179,9 @@ const PendingOrders = () => {
       label: "Orders",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: false,
+        viewColumns: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return value;
         },
@@ -221,7 +222,7 @@ const PendingOrders = () => {
       name: "totalAmount",
       label: "Total Amount",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           return value;
@@ -363,6 +364,8 @@ const PendingOrders = () => {
     selectableRows: "none",
     responsive: "vertical",
     expandableRows: true,
+    download: false, //removes the excel download
+    jumpToPage: true,
     onTableChange: handleTableChange,
     onTableInit: handleTableChange,
     renderExpandableRow: (rowData, rowMeta) => {
@@ -405,8 +408,6 @@ const PendingOrders = () => {
                   })}
                 </TableBody>
                 <TableFooter>
-                  {" "}
-                  {console.log(rowData)}
                   <Typography> Instructions: {rowData[16]}</Typography>
                 </TableFooter>
               </Table>

@@ -62,7 +62,7 @@ const OrderReport = () => {
   const columns = [
     {
       name: "id",
-      label: "System ID", //or the order ID here
+      label: "Order ID", //or the order ID here
       options: {
         filter: false,
         display: false,
@@ -135,6 +135,7 @@ const OrderReport = () => {
         filter: false,
         sort: false,
         display: false,
+        viewColumns: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return value;
         },
@@ -175,7 +176,7 @@ const OrderReport = () => {
       name: "totalAmount",
       label: "Total Amount",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           return value;
@@ -288,6 +289,8 @@ const OrderReport = () => {
     selectableRows: "none",
     responsive: "vertical",
     expandableRows: true,
+    download: false,
+    jumpToPage: true,
     onTableChange: handleTableChange,
     onTableInit: handleTableChange,
     renderExpandableRow: (rowData, rowMeta) => {

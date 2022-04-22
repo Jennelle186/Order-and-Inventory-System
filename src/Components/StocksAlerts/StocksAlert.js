@@ -27,8 +27,9 @@ const StocksAlert = () => {
   const options = {
     filter: true,
     selectableRows: "none",
-    responsive: "simple",
     onRowClick: handleRowClick,
+    download: false,
+    responsive: "standard",
   };
 
   const columns = [

@@ -183,7 +183,8 @@ const ProductTable = () => {
   const options = {
     filter: true,
     selectableRows: "none",
-    responsive: "simple",
+    responsive: "standard",
+    download: false,
     // onRowClick: handleRowClick,
   };
 

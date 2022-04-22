@@ -127,7 +127,9 @@ const History = (props) => {
   const options = {
     filter: true,
     selectableRows: "none",
-    responsive: "simple",
+
+    download: false,
+    responsive: "standard",
   };
   return (
     <div>

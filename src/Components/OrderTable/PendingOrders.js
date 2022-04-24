@@ -239,7 +239,7 @@ const PendingOrders = () => {
     },
     {
       name: "stateOrder",
-      label: "Regular or rush",
+      label: "Regular/Rush",
       options: {
         filter: true,
         sort: true,
@@ -362,7 +362,7 @@ const PendingOrders = () => {
     filter: true,
     filterType: "multiselect",
     selectableRows: "none",
-    responsive: "vertical",
+    responsive: "standard",
     expandableRows: true,
     download: false, //removes the excel download
     jumpToPage: true,

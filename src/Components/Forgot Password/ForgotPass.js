@@ -24,13 +24,19 @@ const ForgotPassword = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         // ..
-        console.log(errorMessage);
+
+        alert(errorMessage);
       });
   };
   return (
     <CardComponent title="Forgot Password">
       <form style={{ margin: "0 auto" }} onSubmit={handleSubmit}>
         <Grid container direction={"column"} spacing={2}>
+          <Grid item xs>
+            <Typography variant="subtitle1">
+              Please check your email for the reset password link
+            </Typography>
+          </Grid>
           <Grid item xs>
             <TextField
               type="text"

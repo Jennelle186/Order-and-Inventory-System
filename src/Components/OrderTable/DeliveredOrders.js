@@ -196,7 +196,7 @@ const OrderReport = () => {
     },
     {
       name: "stateOrder",
-      label: "Regular or rush",
+      label: "Regular/Rush",
       options: {
         filter: true,
         sort: true,
@@ -280,7 +280,7 @@ const OrderReport = () => {
     filter: true,
     filterType: "multiselect",
     selectableRows: "none",
-    responsive: "vertical",
+    responsive: "standard",
     expandableRows: true,
     download: false,
     jumpToPage: true,

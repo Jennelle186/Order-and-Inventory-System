@@ -286,9 +286,7 @@ const AddProducts = () => {
 
           <br />
           <Grid item xs>
-            <ButtonForm type="submit" onClick={handleClick}>
-              Submit
-            </ButtonForm>
+            <ButtonForm type="submit">Submit</ButtonForm>
           </Grid>
         </form>
       </CardComponent>

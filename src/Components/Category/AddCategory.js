@@ -144,9 +144,7 @@ const AddCategory = () => {
           </Grid>
           <br />
           <Grid xs>
-            <ButtonForm type="submit" onClick={handleClick}>
-              Submit
-            </ButtonForm>
+            <ButtonForm type="submit">Submit</ButtonForm>
           </Grid>
         </form>
       </CardComponent>

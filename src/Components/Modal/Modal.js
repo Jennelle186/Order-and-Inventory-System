@@ -19,7 +19,7 @@ const Modal = ({
 }) => {
   const handleConfirm = async () => {
     await deleteProductCallBack(id);
-    alert("Deleted!");
+    alert("Successful!");
     handleClose();
     window.location.reload();
   };

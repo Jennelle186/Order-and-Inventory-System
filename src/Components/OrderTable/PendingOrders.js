@@ -14,7 +14,12 @@ import {
   ThemeProvider,
   createTheme,
   Button,
+  IconButton,
+  Dialog,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 import { db } from "../../Firebase/utils";
 import {
@@ -30,9 +35,13 @@ import {
 } from "firebase/firestore";
 
 import Loading from "../Loading/loading";
+import Modal from "../Modal/Modal";
+import Print from "./print";
 
 const PendingOrders = () => {
   const [total, setTotal] = useState(0);
+  const [uid, setUid] = useState();
+  const [rowData, setRowData] = useState();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -107,6 +116,23 @@ const PendingOrders = () => {
 
   const columns = [
     {
+      name: "Print",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <IconButton
+              color="primary"
+              aria-label="file download"
+              onClick={(e) => handleOpenPrint(tableMeta.rowData[1])}
+            >
+              <FileDownloadIcon />
+            </IconButton>
+          );
+        },
+      },
+    },
+    {
       name: "id",
       label: "Order ID", //or the order ID here
       options: {
@@ -130,7 +156,7 @@ const PendingOrders = () => {
         filter: false,
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return <div>{tableMeta.rowData[1] + " " + tableMeta.rowData[2]}</div>;
+          return <div>{tableMeta.rowData[2] + " " + tableMeta.rowData[3]}</div>;
         },
       },
     },
@@ -149,10 +175,11 @@ const PendingOrders = () => {
       options: {
         filter: false,
         sort: true,
+        display: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <div>
-              {tableMeta.rowData[3]} - {tableMeta.rowData[4]}
+              {tableMeta.rowData[4]} - {tableMeta.rowData[5]}
             </div>
           );
         },
@@ -219,6 +246,14 @@ const PendingOrders = () => {
       },
     },
     {
+      name: "number",
+      label: "Phone Number",
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
       name: "totalAmount",
       label: "Total Amount",
       options: {
@@ -230,13 +265,24 @@ const PendingOrders = () => {
       },
     },
     {
-      name: "number",
-      label: "Phone Number",
+      name: "downpayment",
+      label: "Downpayment",
       options: {
         filter: false,
         sort: true,
+        display: false,
       },
     },
+    {
+      name: "credit",
+      label: "Outstanding Balance",
+      options: {
+        filter: false,
+        sort: true,
+        display: false,
+      },
+    },
+
     {
       name: "stateOrder",
       label: "Regular/Rush",
@@ -245,7 +291,14 @@ const PendingOrders = () => {
         sort: true,
       },
     },
-
+    {
+      name: "mode",
+      label: "Delivery/Pick-Up",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
     {
       name: "orderCreatedAt",
       label: "Month",
@@ -287,7 +340,7 @@ const PendingOrders = () => {
     },
     {
       name: "deliveryDate",
-      label: "Delivery Date",
+      label: "Delivery/Pick-Up Date",
       options: {
         filter: true,
         sort: true,
@@ -306,13 +359,30 @@ const PendingOrders = () => {
       },
     },
     {
-      name: "Set Order Status",
+      name: "Ready to be Delivered",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Button onClick={(e) => updateOrderStatus(tableMeta.rowData[0])}>
+            <Button onClick={(e) => updateOrderStatus(tableMeta.rowData[1])}>
               Ready to be Delivered
+            </Button>
+          );
+        },
+      },
+    },
+    {
+      name: "Cancel",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <Button
+              onClick={(e) => handleOpen(tableMeta.rowData[1])}
+              color="error"
+              variant="outlined"
+            >
+              Cancel
             </Button>
           );
         },
@@ -336,6 +406,54 @@ const PendingOrders = () => {
     }
   };
 
+  //-----CANCEL FUNCTIONS------------------
+
+  //modal----------------------------------
+  const [isOpen, setisOpen] = useState(false);
+
+  const handleOpen = (id) => {
+    setUid(id);
+    setisOpen(true);
+  };
+
+  const handleClose = () => {
+    setisOpen(false);
+  };
+  //---------------------------------------
+
+  const cancel = async (id) => {
+    try {
+      const orderRef = doc(db, "orders", id);
+
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(orderRef, {
+        orderStatus: "Cancelled",
+      });
+
+      // updateData();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  //----------------------------------------
+
+  //---MODA FOR PRINTING---------------------
+  const [isOpenPrint, setisOpenPrint] = useState(false);
+
+  const handleOpenPrint = (rowData) => {
+    setRowData(rowData);
+    setisOpenPrint(true);
+  };
+
+  const handleClosePrint = () => {
+    setisOpenPrint(false);
+  };
+
+  const print = () => {
+    console.log("print");
+  };
+  //------------------------------------------
+
   //update the document of the counts for the # of delivered orders
   //not sure with this yet
   // async function updateData() {
@@ -353,7 +471,7 @@ const PendingOrders = () => {
 
   const calculateTotalSum = (data) => {
     const totalAmount = data
-      .map((a) => a.data[9])
+      .map((a) => a.data[11])
       .reduce((a, b) => (a += b), 0);
     return totalAmount;
   };
@@ -382,7 +500,7 @@ const PendingOrders = () => {
                   <TableCell align="right">Unit Price</TableCell>
                 </TableHead>
                 <TableBody>
-                  {rowData[7].map((row) => {
+                  {rowData[8].map((row) => {
                     return (
                       <TableRow key={row.id + row.color}>
                         <TableCell component="th" scope="row" align="right">
@@ -417,6 +535,9 @@ const PendingOrders = () => {
       );
     },
   };
+
+  let sample = "Are you sure you want to cancel this order?";
+
   return (
     <div style={{ margin: "12px" }}>
       {loading ? (
@@ -442,6 +563,24 @@ const PendingOrders = () => {
           <Loading />
         </>
       )}
+
+      <Modal
+        id={uid}
+        title="Confirmation"
+        subtitle={sample}
+        isOpen={isOpen}
+        handleClose={handleClose}
+        deleteProductCallBack={cancel}
+      />
+
+      <Dialog open={isOpenPrint} onClose={handleClosePrint}>
+        <DialogContent>
+          <Print rowData={rowData} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={(e) => console.log("clicked")}>Print</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

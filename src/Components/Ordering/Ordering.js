@@ -144,7 +144,7 @@ const Ordering = () => {
   const [discount, setDiscount] = useState(0);
   const [rushFee, setRushFee] = useState(0);
   const [customizeFee, setCustomizeFee] = useState(0);
-  const [downpayment, setDownpayment] = useState();
+  const [downpayment, setDownpayment] = useState("");
   // let totalAmount = Number(amount) - (Number(amount) * Number(discount)) / 100; //percentage
   let totalAmount =
     Number(amount) +

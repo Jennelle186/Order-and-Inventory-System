@@ -201,6 +201,14 @@ const OrderReport = () => {
       },
     },
     {
+      name: "mode",
+      label: "Delivery/Pick-Up",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
       name: "orderCreatedAt",
       label: "Month",
       options: {

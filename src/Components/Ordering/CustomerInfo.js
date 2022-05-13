@@ -23,6 +23,9 @@ import {
   updateDoc,
   increment,
   doc,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import { LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -106,15 +109,30 @@ const CustomerInfo = ({
   // adding the user info in the user db
   async function addUser() {
     try {
-      const docRef = await addDoc(collection(db, "users"), {
-        firstName,
-        lastName,
-        houseNo,
-        streetAddress,
-        barangay,
-        landMark,
-        number,
-      });
+      const q = query(
+        collection(db, "users"),
+        where("firstName", "==", firstName),
+        where("lastName", "==", lastName)
+      );
+      const querySnap = await getDocs(q);
+
+      if (querySnap.empty) {
+        console.log("No matching document, name available");
+        const docRef = await addDoc(collection(db, "users"), {
+          firstName,
+          lastName,
+          houseNo,
+          streetAddress,
+          barangay,
+          landMark,
+          number,
+        });
+      } else {
+        console.log(
+          "Name found",
+          querySnap.docs.map((d) => d.data())
+        );
+      }
     } catch (err) {
       console.log("cannot add user");
     }
@@ -156,9 +174,10 @@ const CustomerInfo = ({
         stateOrder,
         deliveryDate,
         mode,
+        downpayment,
         credit,
       });
-      addUser(); // adding the user info in the user db
+      addUser(); //function add user
       updateData();
       clearInfo();
       handleCartClearance();

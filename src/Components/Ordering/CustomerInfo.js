@@ -6,6 +6,12 @@ import {
   Grid,
   Typography,
   Divider,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  InputAdornment,
 } from "@mui/material";
 import ButtonForm from "../Button/ButtonForm";
 import AlertComponent from "../Alert/AlertComponent";
@@ -28,6 +34,12 @@ const CustomerInfo = ({
   totalAmount,
   handleCartClearance,
   stateOrder,
+  downpayment,
+  setDownpayment,
+  amount,
+  setRushFee,
+  setDiscount,
+  setCustomizeFee,
 }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -42,6 +54,13 @@ const CustomerInfo = ({
   const [deliveryDate, setDeliveryDate] = useState(new Date());
   const handleChange = (newValue) => {
     setDeliveryDate(newValue);
+  };
+  //-----------------------------------------------------------
+
+  //for the pick-up or delivery--------------------------------
+  const [mode, setMode] = useState("Delivery");
+  const handleMode = (event) => {
+    setMode(event.target.value);
   };
   //-----------------------------------------------------------
 
@@ -84,6 +103,23 @@ const CustomerInfo = ({
     console.log("done inventory");
   }
 
+  // adding the user info in the user db
+  async function addUser() {
+    try {
+      const docRef = await addDoc(collection(db, "users"), {
+        firstName,
+        lastName,
+        houseNo,
+        streetAddress,
+        barangay,
+        landMark,
+        number,
+      });
+    } catch (err) {
+      console.log("cannot add user");
+    }
+  }
+
   const clearInfo = () => {
     setFirstName("");
     setLastName("");
@@ -94,10 +130,15 @@ const CustomerInfo = ({
     setInstructions("");
     setNumber("");
     setDeliveryDate();
+    setDownpayment("");
+    setRushFee("");
+    setCustomizeFee("");
+    setDiscount("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const docRef = await addDoc(collection(db, "orders"), {
         cartItems,
@@ -114,7 +155,10 @@ const CustomerInfo = ({
         orderStatus: "Pending",
         stateOrder,
         deliveryDate,
+        mode,
+        credit,
       });
+      addUser(); // adding the user info in the user db
       updateData();
       clearInfo();
       handleCartClearance();
@@ -125,6 +169,9 @@ const CustomerInfo = ({
     }
     setOpen(true);
   };
+
+  //----------------------------------------
+  let credit = Number(totalAmount) - (downpayment ? Number(downpayment) : 0);
 
   return (
     <Container style={{ padding: "12px" }}>
@@ -194,9 +241,35 @@ const CustomerInfo = ({
               </Grid>
 
               <Grid item xs={12}>
+                <FormControl>
+                  <FormLabel id="Pick-up-or-delivery">
+                    Pick up or Delivery
+                  </FormLabel>
+                  <RadioGroup
+                    aria-labelledby="Pick-up-or-delivery"
+                    name="Pick-up-or-delivery"
+                    value={mode}
+                    onChange={handleMode}
+                  >
+                    <FormControlLabel
+                      value="Delivery"
+                      control={<Radio />}
+                      label="Delivery"
+                    />
+                    <FormControlLabel
+                      value="Pick-up"
+                      control={<Radio />}
+                      label="Pick-Up"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DesktopDatePicker
-                    label="Delivery Date"
+                    disablePast
+                    label={`${mode} date`}
                     inputFormat="MM/dd/yyyy"
                     value={deliveryDate}
                     onChange={handleChange}
@@ -253,6 +326,64 @@ const CustomerInfo = ({
                   onChange={(e) => setLandMark(e.target.value)}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <Typography>Payment</Typography>
+                <Divider />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography variant="h6">
+                  Total amount: ₱{" "}
+                  {totalAmount.toLocaleString(navigator.language, {
+                    minimumFractionDigits: 2,
+                  })}
+                </Typography>
+              </Grid>
+
+              {totalAmount >= 5000 && (
+                <>
+                  <Grid item xs={12}>
+                    <Typography>
+                      You need to input a downpayment as the ordered items have
+                      already reached more than ₱5,000.00
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      type="number"
+                      label="Downpayment"
+                      value={downpayment}
+                      required
+                      onChange={(e) => {
+                        if (Number(e.target.value) < 0) {
+                          setDownpayment(0);
+                        } else {
+                          setDownpayment(parseInt(e.target.value));
+                        }
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start"> ₱</InputAdornment>
+                        ),
+                        inputProps: {
+                          min: 0,
+                        },
+                        endAdornment: (
+                          <InputAdornment position="start">.00</InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1">
+                      Credit: ₱{" "}
+                      {credit.toLocaleString(navigator.language, {
+                        minimumFractionDigits: 2,
+                      })}
+                    </Typography>
+                  </Grid>
+                </>
+              )}
             </Grid>
           </Grid>
         </Stack>

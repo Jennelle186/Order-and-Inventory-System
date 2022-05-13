@@ -62,6 +62,7 @@ const ListItems = ({
   return (
     <div>
       <Typography variant="subtitle1">List of Orders</Typography>
+
       <form onSubmit={handleSubmit}>
         {cartItems.length === 0 && <div>No Items in the cart</div>}
         <div style={{ marginTop: "12px" }}>
@@ -91,6 +92,7 @@ const ListItems = ({
                       <TableCell>
                         <input
                           style={{ width: "1rem" }}
+                          min="0"
                           value={item.quantity}
                           onChange={(e) => {
                             if (e.target.value === "0") {
@@ -204,11 +206,22 @@ const ListItems = ({
                 label="Rush Fee"
                 type="number"
                 value={rushFee}
-                onChange={(e) => setRushFee(e.target.value)}
+                onChange={(e) => {
+                  if (Number(e.target.value) < 0) {
+                    setRushFee(0);
+                  } else {
+                    setRushFee(parseInt(e.target.value));
+                  }
+                }}
+                // onChange={(e) => setRushFee(parseInt(e.target.value))}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start"> ₱</InputAdornment>
                   ),
+                  inputProps: {
+                    min: 0,
+                  },
+
                   endAdornment: (
                     <InputAdornment position="start">.00</InputAdornment>
                   ),
@@ -220,26 +233,47 @@ const ListItems = ({
               type="number"
               label="Customization Fee"
               value={customizeFee}
-              onChange={(e) => setCustomizeFee(e.target.value)}
+              onChange={(e) => {
+                if (Number(e.target.value) < 0) {
+                  setCustomizeFee(0);
+                } else {
+                  setCustomizeFee(parseInt(e.target.value));
+                }
+              }}
+              // onChange={(e) => parseInt(setCustomizeFee(e.target.value))}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start"> ₱</InputAdornment>
                 ),
+                inputProps: {
+                  min: 0,
+                },
                 endAdornment: (
                   <InputAdornment position="start">.00</InputAdornment>
                 ),
               }}
             />
             <br /> <br />
+            <br /> <br />
             <TextField
               type="number"
               label="Discount"
               value={discount}
-              onChange={(e) => setDiscount(e.target.value)}
+              onChange={(e) => {
+                if (Number(e.target.value) < 0) {
+                  setDiscount(0);
+                } else {
+                  setDiscount(parseInt(e.target.value));
+                }
+              }}
+              // onChange={(e) => setDiscount(parseInt(e.target.value))}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start"> ₱</InputAdornment>
                 ),
+                inputProps: {
+                  min: 0,
+                },
                 endAdornment: (
                   <InputAdornment position="start">.00</InputAdornment>
                 ),

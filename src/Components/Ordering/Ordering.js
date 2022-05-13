@@ -110,7 +110,7 @@ const Ordering = () => {
   };
 
   const handleRemove = (product) => {
-    console.log(product.color, "remove");
+    // console.log(product.color, "remove");
 
     const ProductExist = cartItems.find(
       (item) => item.id === product.id && item.color === product.color
@@ -144,9 +144,13 @@ const Ordering = () => {
   const [discount, setDiscount] = useState(0);
   const [rushFee, setRushFee] = useState(0);
   const [customizeFee, setCustomizeFee] = useState(0);
+  const [downpayment, setDownpayment] = useState();
   // let totalAmount = Number(amount) - (Number(amount) * Number(discount)) / 100; //percentage
   let totalAmount =
-    Number(amount) + Number(rushFee) + Number(customizeFee) - Number(discount); //just the amount
+    Number(amount) +
+    (rushFee ? Number(rushFee) : 0) +
+    (customizeFee ? Number(customizeFee) : 0) +
+    -(discount ? Number(discount) : 0); //just the amount
 
   //rush or regular-------------------------------------------
   const [stateOrder, setOrderState] = useState("Regular");
@@ -179,6 +183,12 @@ const Ordering = () => {
             cartItems={cartItems}
             totalAmount={totalAmount}
             handleCartClearance={handleCartClearance}
+            amount={amount}
+            downpayment={downpayment}
+            setDownpayment={setDownpayment}
+            setRushFee={setRushFee}
+            setCustomizeFee={setCustomizeFee}
+            setDiscount={setDiscount}
           />
         </Card>
         <br />

@@ -11,11 +11,17 @@ import {
   Divider,
   Avatar,
   Stack,
+  DialogActions,
+  Button,
+  AppBar,
 } from "@mui/material";
 import logo from "../../assets/logo.jpg";
 
 import { db } from "../../Firebase/utils";
 import { getDoc, doc } from "firebase/firestore";
+
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const Print = (rowData) => {
   const [order, setOrder] = useState([]);
@@ -45,10 +51,35 @@ const Print = (rowData) => {
     })(); // This immediately runs the func async.
   }, []);
 
+  //generate PDF
+  const generatePdf = () => {
+    var doc = new jsPDF("portrait", "pt", "a4");
+
+    doc.html(document.querySelector("#pdf"), {
+      html2canvas: {
+        // insert html2canvas options here, e.g.
+        scale: 0.5,
+        // width: width,
+        // height: height,
+        quality: 1,
+      },
+      callback: function (pdf) {
+        pdf.save(`${rowData.rowData}.pdf`);
+      },
+    });
+  };
+
   return (
     <div>
       {/* {rowData.rowData} */}
-      <Grid container justify="center">
+      <Button
+        variant="contained"
+        style={{ float: "right" }}
+        onClick={() => generatePdf()}
+      >
+        Print
+      </Button>
+      <Grid container justify="center" id="pdf" style={{ margin: "1rem" }}>
         <Grid item xs={12} style={{ padding: "8px" }}>
           <Grid item xs={12}>
             <Stack direction="row" spacing={2}>
@@ -102,10 +133,9 @@ const Print = (rowData) => {
                   </Grid>
                   <Divider />
                   <Grid item xs={12}>
-                    <Stack direction="row" spacing={2}>
-                      <Typography>First Name: {order.firstName}</Typography>
-                      <Typography>Last Name: {order.lastName} </Typography>
-                    </Stack>
+                    <Typography>First Name: {order.firstName}</Typography>
+
+                    <Typography>Last Name: {order.lastName} </Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography>Phone Number:{order.number}</Typography>
@@ -124,7 +154,7 @@ const Print = (rowData) => {
                   <TableContainer>
                     <Table
                       aria-label="spanning table"
-                      style={{ minWidth: "340px" }}
+                      style={{ minWidth: "200px" }}
                     >
                       <TableHead>
                         <TableRow>
@@ -136,25 +166,19 @@ const Print = (rowData) => {
                       </TableHead>
 
                       <TableBody>
-                        {order.cartItems.map((item) => (
-                          <TableRow key={item.id}>
+                        {order.cartItems.map((item, index) => (
+                          <TableRow key={index}>
                             <TableCell>{item.name}</TableCell>
                             <TableCell align="right">{item.quantity}</TableCell>
                             <TableCell align="right">
-                              ₱{" "}
+                              Php{" "}
                               {item.price.toLocaleString(navigator.language, {
                                 minimumFractionDigits: 2,
                               })}
                             </TableCell>
                             <TableCell align="right">
-                              ₱
-                              {item.price *
-                                item.quantity.toLocaleString(
-                                  navigator.language,
-                                  {
-                                    minimumFractionDigits: 2,
-                                  }
-                                )}
+                              Php {""}
+                              {item.price * item.quantity}.00
                             </TableCell>
                           </TableRow>
                         ))}
@@ -163,7 +187,7 @@ const Print = (rowData) => {
                           <TableCell rowSpan={3} />
                           <TableCell colSpan={2}>Total Amount</TableCell>
                           <TableCell align="right">
-                            ₱{" "}
+                            Php{" "}
                             {order.totalAmount.toLocaleString(
                               navigator.language,
                               {
@@ -175,7 +199,7 @@ const Print = (rowData) => {
                         <TableRow>
                           <TableCell colSpan={2}>Downpayment</TableCell>
                           <TableCell align="right">
-                            ₱{" "}
+                            Php{" "}
                             {order.downpayment?.toLocaleString(
                               navigator.language,
                               {

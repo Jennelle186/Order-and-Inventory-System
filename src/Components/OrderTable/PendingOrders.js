@@ -577,9 +577,6 @@ const PendingOrders = () => {
         <DialogContent>
           <Print rowData={rowData} />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={(e) => console.log("clicked")}>Print</Button>
-        </DialogActions>
       </Dialog>
     </div>
   );

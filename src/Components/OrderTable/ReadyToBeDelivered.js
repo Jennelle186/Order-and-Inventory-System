@@ -184,17 +184,6 @@ const ReadyToBeDelivered = () => {
       },
     },
     {
-      name: "totalAmount",
-      label: "Total Amount",
-      options: {
-        filter: true,
-        sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return value;
-        },
-      },
-    },
-    {
       name: "number",
       label: "Phone Number",
       options: {
@@ -203,7 +192,45 @@ const ReadyToBeDelivered = () => {
       },
     },
     {
+      name: "totalAmount",
+      label: "Total Amount",
+      options: {
+        filter: false,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return value;
+        },
+      },
+    },
+    {
+      name: "downpayment",
+      label: "Dowpayment",
+      options: {
+        filter: false,
+        sort: true,
+        display: false,
+      },
+    },
+    {
+      name: "credit",
+      label: "Outstanding Balance",
+      options: {
+        filter: false,
+        sort: true,
+        display: false,
+      },
+    },
+
+    {
       name: "stateOrder",
+      label: "Delivery/Pick-Up",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "mode",
       label: "Regular/Rush",
       options: {
         filter: true,
@@ -252,7 +279,7 @@ const ReadyToBeDelivered = () => {
     },
     {
       name: "deliveryDate",
-      label: "Delivery Date",
+      label: "Delivery/Pick-Up Date",
       options: {
         filter: true,
         sort: true,
@@ -318,7 +345,7 @@ const ReadyToBeDelivered = () => {
 
   const calculateTotalSum = (data) => {
     const totalAmount = data
-      .map((a) => a.data[9])
+      .map((a) => a.data[10])
       .reduce((a, b) => (a += b), 0);
     return totalAmount;
   };

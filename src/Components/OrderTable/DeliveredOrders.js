@@ -174,17 +174,6 @@ const OrderReport = () => {
         },
       },
     },
-    {
-      name: "totalAmount",
-      label: "Total Amount",
-      options: {
-        filter: true,
-        sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return value;
-        },
-      },
-    },
 
     {
       name: "number",
@@ -195,8 +184,46 @@ const OrderReport = () => {
       },
     },
     {
+      name: "totalAmount",
+      label: "Total Amount",
+      options: {
+        filter: false,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return value;
+        },
+      },
+    },
+    {
+      name: "downpayment",
+      label: "Downpayment",
+      options: {
+        filter: false,
+        sort: true,
+        display: false,
+      },
+    },
+    {
+      name: "credit",
+      label: "Outstanding balance",
+      options: {
+        filter: false,
+        sort: true,
+        display: false,
+      },
+    },
+
+    {
       name: "stateOrder",
       label: "Regular/Rush",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "mode",
+      label: "Delivery/Pick-Up",
       options: {
         filter: true,
         sort: true,
@@ -271,7 +298,7 @@ const OrderReport = () => {
 
   const calculateTotalSum = (data) => {
     const totalAmount = data
-      .map((a) => a.data[9])
+      .map((a) => a.data[10])
       .reduce((a, b) => (a += b), 0);
     return totalAmount;
   };

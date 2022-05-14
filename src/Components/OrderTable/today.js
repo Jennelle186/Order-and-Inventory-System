@@ -173,6 +173,14 @@ const OrderReport = () => {
       },
     },
     {
+      name: "number",
+      label: "Phone Number",
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
       name: "totalAmount",
       label: "Total Amount",
       options: {
@@ -183,15 +191,25 @@ const OrderReport = () => {
         },
       },
     },
-
     {
-      name: "number",
-      label: "Phone Number",
+      name: "downpayment",
+      label: "Downpayment",
       options: {
         filter: false,
         sort: true,
+        display: false,
       },
     },
+    {
+      name: "credit",
+      label: "Outstanding Balance",
+      options: {
+        filter: false,
+        sort: true,
+        display: false,
+      },
+    },
+
     {
       name: "stateOrder",
       label: "Regular/Rush",
@@ -200,6 +218,7 @@ const OrderReport = () => {
         sort: true,
       },
     },
+
     {
       name: "mode",
       label: "Delivery/Pick-Up",
@@ -257,23 +276,23 @@ const OrderReport = () => {
       },
     },
     {
-      name: "orderStatus",
-      label: "Order Status",
-      options: {
-        filter: true,
-        sort: true,
-        display: true,
-      },
-    },
-    {
       name: "deliveryDate",
-      label: "Delivery Date",
+      label: "Delivery Date/Pick-Up Date",
       options: {
         filter: true,
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           return new Date(value?.seconds * 1000).toDateString();
         },
+      },
+    },
+    {
+      name: "orderStatus",
+      label: "Order Status",
+      options: {
+        filter: true,
+        sort: true,
+        display: true,
       },
     },
   ];
@@ -286,7 +305,7 @@ const OrderReport = () => {
 
   const calculateTotalSum = (data) => {
     const totalAmount = data
-      .map((a) => a.data[9])
+      .map((a) => a.data[10])
       .reduce((a, b) => (a += b), 0);
     return totalAmount;
   };

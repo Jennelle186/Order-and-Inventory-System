@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import {
   Table,
@@ -8,33 +8,20 @@ import {
   TableHead,
   TableRow,
   List,
+  ListItem,
   ListItemText,
   Typography,
   TableFooter,
   ThemeProvider,
   createTheme,
-  Button,
 } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
 
 import { db } from "../../Firebase/utils";
-import {
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  where,
-  doc,
-  updateDoc,
-  onSnapshot,
-  increment,
-} from "firebase/firestore";
+import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
 
 import Loading from "../Loading/loading";
-import Print from "./print";
 
-const ReadyToBeDelivered = () => {
-  const navigate = useNavigate();
+const Cancelled = () => {
   const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -42,28 +29,29 @@ const ReadyToBeDelivered = () => {
   useEffect(() => {
     let isMounted = true;
 
-    const retrieve = async () => {
+    const getOrders = async () => {
+      // const querySnapshot = await getDocs(collection(db, "orders"));
+      const ordersRef = collection(db, "orders");
       const q = query(
-        collection(db, "orders"),
-        where("orderStatus", "==", "Ready to be Delivered"),
+        ordersRef,
+        where("orderStatus", "==", "Cancelled"),
         orderBy("orderCreatedAt", "desc")
       );
-      await onSnapshot(q, (snapshot) => {
-        const arr = [];
-        snapshot.forEach((userSnapshot) => {
-          arr.push({
-            ...userSnapshot.data(),
-            id: userSnapshot.id,
-          });
+      const querySnapshot = await getDocs(q);
+      const arr = [];
+      querySnapshot.forEach((doc) => {
+        arr.push({
+          ...doc.data(),
+          id: doc.id,
         });
-        if (isMounted) {
-          setOrders(arr);
-          setLoading(true);
-        }
       });
+      if (isMounted) {
+        setOrders(arr);
+        setLoading(true);
+      }
     };
 
-    retrieve().catch((err) => {
+    getOrders().catch((err) => {
       if (!isMounted) return;
       console.error("failed to fetch data", err);
     });
@@ -186,6 +174,7 @@ const ReadyToBeDelivered = () => {
         },
       },
     },
+
     {
       name: "number",
       label: "Phone Number",
@@ -207,7 +196,7 @@ const ReadyToBeDelivered = () => {
     },
     {
       name: "downpayment",
-      label: "Dowpayment",
+      label: "Downpayment",
       options: {
         filter: false,
         sort: true,
@@ -216,7 +205,7 @@ const ReadyToBeDelivered = () => {
     },
     {
       name: "credit",
-      label: "Outstanding Balance",
+      label: "Outstanding balance",
       options: {
         filter: false,
         sort: true,
@@ -226,7 +215,7 @@ const ReadyToBeDelivered = () => {
 
     {
       name: "stateOrder",
-      label: "Delivery/Pick-Up",
+      label: "Regular/Rush",
       options: {
         filter: true,
         sort: true,
@@ -234,13 +223,12 @@ const ReadyToBeDelivered = () => {
     },
     {
       name: "mode",
-      label: "Regular/Rush",
+      label: "Delivery/Pick-Up",
       options: {
         filter: true,
         sort: true,
       },
     },
-
     {
       name: "orderCreatedAt",
       label: "Month",
@@ -281,17 +269,6 @@ const ReadyToBeDelivered = () => {
       },
     },
     {
-      name: "deliveryDate",
-      label: "Delivery/Pick-Up Date",
-      options: {
-        filter: true,
-        sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return new Date(value?.seconds * 1000).toDateString();
-        },
-      },
-    },
-    {
       name: "instructions",
       label: "Instructions",
       options: {
@@ -301,44 +278,17 @@ const ReadyToBeDelivered = () => {
       },
     },
     {
-      name: "Set Order Status",
+      name: "deliveryDate",
+      label: "Delivery Date",
       options: {
-        filter: false,
+        filter: true,
+        sort: true,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return (
-            <Button onClick={(e) => updateOrderStatus(tableMeta.rowData[0])}>
-              Delivered
-            </Button>
-          );
+          return new Date(value?.seconds * 1000).toDateString();
         },
       },
     },
   ];
-
-  //update the order status to delivered
-  const updateOrderStatus = async (id) => {
-    try {
-      const orderRef = doc(db, "orders", id);
-
-      // Set the "capital" field of the city 'DC'
-      await updateDoc(orderRef, {
-        orderStatus: "Delivered",
-      });
-
-      updateData();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  //update the document of the counts for the # of delivered orders
-  //not sure with this yet
-  async function updateData() {
-    const docRef = doc(db, "orders", "counts");
-    await updateDoc(docRef, {
-      [`deliveredOrder`]: increment(1),
-    });
-  }
 
   function handleTableChange(action, tableState) {
     // console.log("handleTableChange:... ", tableState.displayData);
@@ -353,12 +303,6 @@ const ReadyToBeDelivered = () => {
     return totalAmount;
   };
 
-  const handleRowClick = (rowData, rowMeta) => {
-    console.log(rowData[0]);
-
-    // navigate("/edit-products", { state: rowData[0] });
-  };
-
   const options = {
     filter: true,
     filterType: "multiselect",
@@ -367,7 +311,6 @@ const ReadyToBeDelivered = () => {
     expandableRows: true,
     download: false,
     jumpToPage: true,
-    onRowClick: handleRowClick,
     onTableChange: handleTableChange,
     onTableInit: handleTableChange,
     renderExpandableRow: (rowData, rowMeta) => {
@@ -411,7 +354,7 @@ const ReadyToBeDelivered = () => {
                 </TableBody>
                 <TableFooter>
                   {" "}
-                  <Typography> Instructions: {rowData[16]}</Typography>
+                  <Typography> Instructions: {rowData[14]}</Typography>
                 </TableFooter>
               </Table>
             </TableContainer>
@@ -420,6 +363,7 @@ const ReadyToBeDelivered = () => {
       );
     },
   };
+
   return (
     <div style={{ margin: "12px" }}>
       {loading ? (
@@ -433,7 +377,7 @@ const ReadyToBeDelivered = () => {
           </Typography>
           <ThemeProvider theme={createTheme()}>
             <MUIDataTable
-              title={"Ready to be Delivered Orders"}
+              title={"Cancelled Orders"}
               columns={columns}
               data={orders}
               options={options}
@@ -449,4 +393,4 @@ const ReadyToBeDelivered = () => {
   );
 };
 
-export default ReadyToBeDelivered;
+export default Cancelled;

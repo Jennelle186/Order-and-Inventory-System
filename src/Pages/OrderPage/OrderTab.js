@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import PendingOrders from "../../Components/OrderTable/PendingOrders";
 import DeliveredOrders from "../../Components/OrderTable/DeliveredOrders";
 import ReadyToBeDelivered from "../../Components/OrderTable/ReadyToBeDelivered";
+import Cancelled from "../../Components/OrderTable/CancelledOrders";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,6 +60,7 @@ const OrderTab = () => {
           <Tab label="Pending" {...a11yProps(0)} />
           <Tab label="Ready to be Delivered" {...a11yProps(1)} />
           <Tab label="Delivered" {...a11yProps(2)} />
+          <Tab label="Cancelled" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -69,6 +71,9 @@ const OrderTab = () => {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <DeliveredOrders />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <Cancelled />
       </TabPanel>
     </Box>
   );

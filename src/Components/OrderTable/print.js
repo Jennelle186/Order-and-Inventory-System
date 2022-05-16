@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Table,
   TableBody,
@@ -14,17 +14,21 @@ import {
   DialogActions,
   Button,
   AppBar,
+  Box,
 } from "@mui/material";
 import logo from "../../assets/logo.jpg";
 
 import { db } from "../../Firebase/utils";
 import { getDoc, doc } from "firebase/firestore";
 
+import "./styles.css";
+
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 const Print = (rowData) => {
   const [order, setOrder] = useState([]);
+  const printContainer = useRef(null);
 
   const getOrder = async () => {
     const docRef = doc(db, "orders", rowData.rowData);
@@ -58,9 +62,10 @@ const Print = (rowData) => {
     doc.html(document.querySelector("#pdf"), {
       html2canvas: {
         // insert html2canvas options here, e.g.
-        scale: 0.5,
+        // scale: 0.5,
         // width: width,
         // height: height,
+        // scale: 0.5,
         quality: 1,
       },
       callback: function (pdf) {
@@ -69,20 +74,34 @@ const Print = (rowData) => {
     });
   };
 
+  console.log(JSON.stringify(order));
+
   return (
-    <div>
-      {/* {rowData.rowData} */}
-      <Button
+    <>
+      {/* <Button
         variant="contained"
         style={{ float: "right" }}
         onClick={() => generatePdf()}
       >
         Print
-      </Button>
-      <Grid container justify="center" id="pdf" style={{ margin: "1rem" }}>
-        <Grid item xs={12} style={{ padding: "8px" }}>
-          <Grid item xs={12}>
-            <Stack direction="row" spacing={2}>
+      </Button> */}
+
+      <div class="button">
+        {" "}
+        <Button
+          type="button"
+          onClick={() => window.print()}
+          variant="contained"
+        >
+          PRINT
+        </Button>
+      </div>
+
+      <div className="App">
+        <Grid container justify="center"></Grid>
+        <div class="page-header">
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Stack direction="row" spacing={2} style={{ margin: "0 auto" }}>
               <Avatar
                 alt="logo1"
                 src={logo}
@@ -95,158 +114,185 @@ const Print = (rowData) => {
                 Lines Printing Services
               </Typography>
             </Stack>
-            {order &&
-              order.map((order, index) => (
-                <div key={index}>
-                  {" "}
-                  <Grid item xs={12}>
-                    {" "}
-                    <Typography variant="subtitle2">
-                      Order ID: {rowData.rowData}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      Order created at:{" "}
-                      {new Date(
-                        order.orderCreatedAt?.seconds * 1000
-                      ).toDateString()}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      State: {order.mode}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      {order.mode} date:{" "}
-                      {new Date(
-                        order.deliveryDate?.seconds * 1000
-                      ).toDateString()}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      Order: {order.stateOrder} order
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      Instructions: {order.instructions}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="h6" align="center">
-                      Customer Details
-                    </Typography>
-                  </Grid>
-                  <Divider />
-                  <Grid item xs={12}>
-                    <Typography>First Name: {order.firstName}</Typography>
+          </Box>
+          <Divider />
+          <br />
+        </div>
 
-                    <Typography>Last Name: {order.lastName} </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography>Phone Number:{order.number}</Typography>
-                    <Typography>
-                      House No and Street Address:{" "}
-                      {order.houseNo + ", " + order.streetAddress}{" "}
-                    </Typography>
-                    <Typography>Barangay: {order.barangay}</Typography>
-                    <Typography>Landmark: {order.landMark}</Typography>
-                  </Grid>
-                  {/* ----------------------------------------------------------------- */}
-                  <Typography variant="h6" align="center">
-                    Order Details
-                  </Typography>
-                  <Divider />
-                  <TableContainer>
-                    <Table
-                      aria-label="spanning table"
-                      style={{ minWidth: "200px" }}
-                    >
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Product Name</TableCell>
-                          <TableCell align="right">Qty.</TableCell>
-                          <TableCell align="right">Price</TableCell>
-                          <TableCell align="right">Sum</TableCell>
-                        </TableRow>
-                      </TableHead>
+        <div class="page-footer"></div>
 
-                      <TableBody>
-                        {order.cartItems.map((item, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell align="right">{item.quantity}</TableCell>
-                            <TableCell align="right">
-                              Php{" "}
-                              {item.price.toLocaleString(navigator.language, {
-                                minimumFractionDigits: 2,
-                              })}
-                            </TableCell>
-                            <TableCell align="right">
-                              Php {""}
-                              {item.price * item.quantity}.00
-                            </TableCell>
-                          </TableRow>
-                        ))}
+        <table>
+          <thead>
+            <tr>
+              <td>
+                {/* <!--place holder for the fixed-position header--> */}
+                <div class="page-header-space" />
+              </td>
+            </tr>
+          </thead>
 
-                        <TableRow>
-                          <TableCell rowSpan={3} />
-                          <TableCell colSpan={2}>Total Amount</TableCell>
-                          <TableCell align="right">
-                            Php{" "}
-                            {order.totalAmount.toLocaleString(
-                              navigator.language,
-                              {
-                                minimumFractionDigits: 2,
-                              }
+          <tbody>
+            <tr>
+              <td>
+                {/* <!--*** CONTENT GOES HERE ***--> */}
+
+                <div class="page">
+                  {order &&
+                    order.map((order, index) => (
+                      <div key={index}>
+                        {" "}
+                        <Grid
+                          item
+                          xs={12}
+                          style={{ float: "left", textAlign: "left" }}
+                        >
+                          {" "}
+                          <Typography variant="subtitle1">
+                            Order ID: {rowData.rowData}
+                          </Typography>
+                          <Typography variant="subtitle1">
+                            State: {order.mode}
+                          </Typography>
+                          <Typography variant="subtitle1">
+                            {order.mode} date:{" "}
+                            {new Date(
+                              order.deliveryDate?.seconds * 1000
+                            ).toDateString()}
+                          </Typography>
+                          <Typography variant="subtitle1">
+                            Order: {order.stateOrder} order
+                          </Typography>
+                          <Typography variant="subtitle1" gutterbottom>
+                            {order.instruction === "" ? (
+                              <p></p>
+                            ) : (
+                              <Typography variant="subtitle1">
+                                Instructions: {order.instruction}
+                              </Typography>
                             )}
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell colSpan={2}>Downpayment</TableCell>
-                          <TableCell align="right">
-                            Php{" "}
-                            {order.downpayment?.toLocaleString(
-                              navigator.language,
-                              {
-                                minimumFractionDigits: 2,
-                              }
-                            ) || "0.00"}
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell colSpan={2}>Outstanding balance</TableCell>
-                          <TableCell align="right">
-                            Php{" "}
-                            {order.credit?.toLocaleString(navigator.language, {
-                              minimumFractionDigits: 2,
-                            })}
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </div>
-              ))}
-          </Grid>
-          {/* -------------------------------------------------------------- */}
+                          </Typography>
+                          <br />
+                          <Typography variant="subtitle1">
+                            Deliver to:{" "}
+                            {order.firstName + "  " + order.lastName}
+                          </Typography>
+                          <Typography variant="subtitle1">
+                            Phone number: {order.number}
+                          </Typography>
+                          <Typography variant="subtitle1">
+                            House No, Street Address :{" "}
+                            {order.houseNo + ", " + order.streetAddress}
+                          </Typography>
+                          <Typography variant="subtitle1">
+                            Barangay : {order.barangay}
+                          </Typography>
+                          <Typography v variant="subtitle1">
+                            Landmark: {order.landMark}
+                          </Typography>
+                        </Grid>
+                        {/* ----------------------------------------------------------------- */}
+                        <TableContainer>
+                          <Divider />
+                          <Typography variant="h6"> Order Details</Typography>
+                          <Table aria-label="spanning table" size=" small">
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Product Name</TableCell>
+                                <TableCell align="right">Qty.</TableCell>
+                                <TableCell align="right">Price</TableCell>
+                                <TableCell align="right">Sum</TableCell>
+                              </TableRow>
+                            </TableHead>
 
-          <div
-            style={{
-              textAlign: "center",
-              marginTop: "2rem",
-              marginBottom: "1rem",
-              margin: "1rem",
-            }}
-          >
-            <Typography color="primary" variant="subtitle1">
-              LINES PRINTING SERVICES
-            </Typography>
-            <Typography variant="subtitle1">
-              E Locson Drive, Talon-Talon, Zamboanga City, Zamboanga Del Sur
-              <br />
-              Call us at 0917 676 5010 / 0917 676 5011
-              <br />
-              Linesprintingservices@gmail.com <br /> Lines Hub (Facebook)
-            </Typography>
-          </div>
-        </Grid>
-      </Grid>
-    </div>
+                            <TableBody>
+                              {order.cartItems.map((item, index) => (
+                                <TableRow key={index}>
+                                  <TableCell>{item.name}</TableCell>
+                                  <TableCell align="right">
+                                    {item.quantity}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    Php{" "}
+                                    {item.price.toLocaleString(
+                                      navigator.language,
+                                      {
+                                        minimumFractionDigits: 2,
+                                      }
+                                    )}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    Php {""}
+                                    {item.price * item.quantity}.00
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+
+                              <TableRow>
+                                <TableCell rowSpan={3} />
+                                <TableCell colSpan={2}>Total Amount</TableCell>
+                                <TableCell align="right">
+                                  Php{" "}
+                                  {order.totalAmount.toLocaleString(
+                                    navigator.language,
+                                    {
+                                      minimumFractionDigits: 2,
+                                    }
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell colSpan={2}>Downpayment</TableCell>
+                                <TableCell align="right">
+                                  Php{" "}
+                                  {order.downpayment?.toLocaleString(
+                                    navigator.language,
+                                    {
+                                      minimumFractionDigits: 2,
+                                    }
+                                  ) || "0.00"}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell colSpan={2}>
+                                  Outstanding balance
+                                </TableCell>
+                                <TableCell align="right">
+                                  Php{" "}
+                                  {order.credit?.toLocaleString(
+                                    navigator.language,
+                                    {
+                                      minimumFractionDigits: 2,
+                                    }
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </div>
+                    ))}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+
+          <tfoot>
+            <tr>
+              <td>
+                {/* <!--place holder for the fixed-position footer--> */}
+                <div class="page-footer-space" />
+                <Typography variant="subtitle2">
+                  E Locson Drive, Talon-Talon, Zamboanga City, Zamboanga Del Sur
+                  <br />
+                  Call us at 0917 676 5010 / 0917 676 5011
+                  <br /> Linesprintingservices@gmail.com | Lines Hub (Facebook)
+                </Typography>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </>
   );
 };
 

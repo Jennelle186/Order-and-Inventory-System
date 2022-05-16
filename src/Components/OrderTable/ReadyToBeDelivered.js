@@ -47,7 +47,7 @@ const ReadyToBeDelivered = () => {
       const q = query(
         collection(db, "orders"),
         where("orderStatus", "==", "Ready to be Delivered"),
-        orderBy("orderCreatedAt", "desc")
+        orderBy("orderCreatedAt", "asc")
       );
       await onSnapshot(q, (snapshot) => {
         const arr = [];
@@ -307,7 +307,12 @@ const ReadyToBeDelivered = () => {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Button onClick={(e) => updateOrderStatus(tableMeta.rowData[0])}>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                updateOrderStatus(tableMeta.rowData[0]);
+              }}
+            >
               Delivered
             </Button>
           );
@@ -317,7 +322,7 @@ const ReadyToBeDelivered = () => {
   ];
 
   //update the order status to delivered
-  const updateOrderStatus = async (id) => {
+  const updateOrderStatus = async (id, e) => {
     try {
       const orderRef = doc(db, "orders", id);
 
@@ -361,7 +366,7 @@ const ReadyToBeDelivered = () => {
 
   const [rowData, setRowData] = useState();
 
-  const handleRowClick = (rowData, rowMeta) => {
+  const handleRowClick = (rowData, rowMeta, e) => {
     setRowData(rowData[0]);
     setisOpenPrint(true);
   };

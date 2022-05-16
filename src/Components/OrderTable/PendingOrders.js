@@ -82,7 +82,7 @@ const PendingOrders = () => {
       const q = query(
         collection(db, "orders"),
         where("orderStatus", "==", "Pending"),
-        orderBy("orderCreatedAt", "desc")
+        orderBy("orderCreatedAt", "asc")
       );
       await onSnapshot(q, (snapshot) => {
         const arr = [];

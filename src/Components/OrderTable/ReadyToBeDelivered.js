@@ -14,6 +14,8 @@ import {
   ThemeProvider,
   createTheme,
   Button,
+  Dialog,
+  DialogContent,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -34,7 +36,6 @@ import Loading from "../Loading/loading";
 import Print from "./print";
 
 const ReadyToBeDelivered = () => {
-  const navigate = useNavigate();
   const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -353,11 +354,23 @@ const ReadyToBeDelivered = () => {
     return totalAmount;
   };
 
-  const handleRowClick = (rowData, rowMeta) => {
-    console.log(rowData[0]);
+  //modal----------------------------------
 
-    // navigate("/edit-products", { state: rowData[0] });
+  //---MODA FOR PRINTING---------------------
+  const [isOpenPrint, setisOpenPrint] = useState(false);
+
+  const [rowData, setRowData] = useState();
+
+  const handleRowClick = (rowData, rowMeta) => {
+    setRowData(rowData[0]);
+    setisOpenPrint(true);
   };
+
+  const handleClosePrint = () => {
+    setisOpenPrint(false);
+  };
+
+  //---------------------------------------
 
   const options = {
     filter: true,
@@ -445,6 +458,12 @@ const ReadyToBeDelivered = () => {
           <Loading />
         </>
       )}
+
+      <Dialog open={isOpenPrint} onClose={handleClosePrint}>
+        <DialogContent>
+          <Print rowData={rowData} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

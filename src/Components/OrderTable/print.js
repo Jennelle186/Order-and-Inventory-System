@@ -74,8 +74,6 @@ const Print = (rowData) => {
     });
   };
 
-  console.log(JSON.stringify(order));
-
   return (
     <>
       {/* <Button
@@ -263,7 +261,7 @@ const Print = (rowData) => {
                                     {
                                       minimumFractionDigits: 2,
                                     }
-                                  )}
+                                  ) || "0.00"}
                                 </TableCell>
                               </TableRow>
                             </TableBody>

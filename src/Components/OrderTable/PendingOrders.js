@@ -449,9 +449,6 @@ const PendingOrders = () => {
     setisOpenPrint(false);
   };
 
-  const print = () => {
-    console.log("print");
-  };
   //------------------------------------------
 
   //update the document of the counts for the # of delivered orders

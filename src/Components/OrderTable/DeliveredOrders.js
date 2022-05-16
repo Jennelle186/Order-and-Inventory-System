@@ -14,12 +14,15 @@ import {
   TableFooter,
   ThemeProvider,
   createTheme,
+  Dialog,
+  DialogContent,
 } from "@mui/material";
 
 import { db } from "../../Firebase/utils";
 import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
 
 import Loading from "../Loading/loading";
+import Print from "./print";
 
 const OrderReport = () => {
   const [total, setTotal] = useState(0);
@@ -303,6 +306,22 @@ const OrderReport = () => {
     return totalAmount;
   };
 
+  //---MODA FOR PRINTING---------------------
+  const [isOpenPrint, setisOpenPrint] = useState(false);
+
+  const [rowData, setRowData] = useState();
+
+  const handleRowClick = (rowData, rowMeta) => {
+    setRowData(rowData[0]);
+    setisOpenPrint(true);
+  };
+
+  const handleClosePrint = () => {
+    setisOpenPrint(false);
+  };
+
+  //---------------------------------------
+
   const options = {
     filter: true,
     filterType: "multiselect",
@@ -311,6 +330,7 @@ const OrderReport = () => {
     expandableRows: true,
     download: false,
     jumpToPage: true,
+    onRowClick: handleRowClick,
     onTableChange: handleTableChange,
     onTableInit: handleTableChange,
     renderExpandableRow: (rowData, rowMeta) => {
@@ -389,6 +409,12 @@ const OrderReport = () => {
           <Loading />
         </>
       )}
+
+      <Dialog open={isOpenPrint} onClose={handleClosePrint}>
+        <DialogContent>
+          <Print rowData={rowData} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

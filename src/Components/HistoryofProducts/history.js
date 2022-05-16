@@ -108,6 +108,14 @@ const History = (props) => {
       },
     },
     {
+      name: "supplier",
+      label: "Supplier",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
       name: "createdDate",
       label: "Date when modified",
       options: {

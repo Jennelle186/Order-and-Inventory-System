@@ -124,6 +124,13 @@ const ProductTable = () => {
       },
     },
     {
+      name: "supplier",
+      label: "Supplier",
+      options: {
+        filter: true,
+      },
+    },
+    {
       name: "Edit",
       options: {
         filter: false,

@@ -27,6 +27,7 @@ const EditProduct = (props) => {
   const [colorList, setColorList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState([]);
+  const [supplier, setSupplier] = useState("");
 
   //for the alert------
   const [open, setOpen] = useState(false);
@@ -176,13 +177,14 @@ const EditProduct = (props) => {
     try {
       const historyRef = await doc(db, "products", state);
       const colRef = collection(historyRef, "history");
-      product.map(({ prodName, price, colorMap, size, cat }) => {
+      product.map(({ prodName, price, colorMap, size, cat, supplier }) => {
         addDoc(colRef, {
           prodName,
           price,
           colorMap,
           size,
           cat,
+          supplier,
           createdDate: new Date(),
         });
       });
@@ -301,6 +303,20 @@ const EditProduct = (props) => {
                         // value={price}
                         // onChange={(e) => setPrice(e.target.value)}
                       />
+                    </Grid>
+
+                    <Grid item>
+                      <Grid item>
+                        <TextField
+                          type="text"
+                          value={prod.supplier}
+                          variant="outlined"
+                          label="Supplier"
+                          name="supplier" //<---- name attribute similar to the variable saved in db
+                          fullWidth
+                          onChange={changeHandler(index)}
+                        />
+                      </Grid>
                     </Grid>
                     <Grid item>
                       {Object.entries(prod.colorMap).map((color) => (

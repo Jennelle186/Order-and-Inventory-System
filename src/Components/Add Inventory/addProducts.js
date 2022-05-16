@@ -24,6 +24,7 @@ const AddProducts = () => {
   const [category, setCategory] = useState([]);
   const [size, setSize] = useState();
   const [price, setPrice] = useState();
+  const [supplier, setSupplier] = useState("");
   const [colorList, setColorList] = useState([{ color: "", colorStocks: "" }]);
 
   const fetchCategory = async () => {
@@ -112,6 +113,7 @@ const AddProducts = () => {
       price: Number(price),
       size: size,
       cat: cat,
+      supplier,
       colorMap,
       // color: color,
     });
@@ -218,6 +220,19 @@ const AddProducts = () => {
               id="price"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
+              required
+              fullWidth
+            />
+          </Grid>
+          <br />
+          <Grid item xs>
+            <TextField
+              label="Supplier"
+              name="supplier"
+              type="text"
+              id="supploer"
+              value={supplier}
+              onChange={(e) => setSupplier(e.target.value)}
               required
               fullWidth
             />

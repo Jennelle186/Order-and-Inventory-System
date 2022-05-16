@@ -42,7 +42,7 @@ const ListItems = ({
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(cartItems, "order");
+    // console.log(cartItems, "order");
   };
 
   //for the pagination
@@ -91,8 +91,9 @@ const ListItems = ({
                       <TableCell align="center">{item.color}</TableCell>
                       <TableCell>
                         <input
-                          style={{ width: "1rem" }}
+                          style={{ width: "2rem" }}
                           min="0"
+                          required
                           value={item.quantity}
                           onChange={(e) => {
                             if (e.target.value === "0") {

@@ -116,7 +116,7 @@ const Ordering = () => {
       (item) => item.id === product.id && item.color === product.color
     );
 
-    if (ProductExist.quantity === 1) {
+    if (ProductExist?.quantity <= 1) {
       setCartItems(
         cartItems.filter(
           (item) => item.id !== product.id || item.color !== product.color

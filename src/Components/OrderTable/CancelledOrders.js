@@ -19,7 +19,15 @@ import {
 } from "@mui/material";
 
 import { db } from "../../Firebase/utils";
-import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  writeBatch,
+  doc,
+} from "firebase/firestore";
 
 import Loading from "../Loading/loading";
 import Print from "./print";
@@ -321,7 +329,7 @@ const Cancelled = () => {
   };
 
   //---------------------------------------
-
+  // const [idsToDelete, setIdsToDelete] = useState([]);
   const options = {
     filter: true,
     filterType: "multiselect",
@@ -330,6 +338,11 @@ const Cancelled = () => {
     expandableRows: true,
     download: false,
     jumpToPage: true,
+    selectableRows: true, // to enable the checkbox when deleting the rows
+    onRowsDelete: (rowsDeleted) => {
+      const idArray = rowsDeleted.data.map((d) => orders[d.dataIndex].id); // array of all ids to to be deleted
+      deleteInFirestore(idArray);
+    },
     onRowClick: handleRowClick,
     onTableChange: handleTableChange,
     onTableInit: handleTableChange,
@@ -383,6 +396,25 @@ const Cancelled = () => {
       );
     },
   };
+
+  //deleting data in firebase or deleting the order(s)
+  async function deleteInFirestore(idsToDelete) {
+    try {
+      const batch = writeBatch(db);
+
+      idsToDelete.forEach((id) => {
+        batch.delete(doc(db, "orders", id));
+      });
+
+      await batch.commit();
+      alert("deleted");
+      window.location.reload();
+
+      console.log("deleted");
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <div style={{ margin: "12px" }}>

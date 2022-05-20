@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ThemeProvider, createTheme, Stack, Grid } from "@mui/material";
+import { ThemeProvider, createTheme, Stack, Grid, Button } from "@mui/material";
 import ButtonForm from "../Button/ButtonForm";
 
 import { db } from "../../Firebase/utils";
@@ -12,6 +12,8 @@ import {
   query,
   getDoc,
   orderBy,
+  doc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const History = (props) => {
@@ -54,6 +56,14 @@ const History = (props) => {
 
   //Displaying the data by columns. The "name" must be a data exactly the same from what was saved in the database
   const columns = [
+    // {
+    //   name: "id",
+    //   label: "Category",
+    //   options: {
+    //     filter: true,
+    //     sort: true,
+    //   },
+    // },
     {
       name: "cat",
       label: "Category",
@@ -129,12 +139,35 @@ const History = (props) => {
         },
       },
     },
+    // {
+    //   name: "Delete",
+    //   options: {
+    //     filter: false,
+    //     customBodyRender: (value, tableMeta, updateValue) => {
+    //       return (
+    //         //button to pass the ID of the row to delete it
+    //         <Button
+    //           color="error"
+    //           onClick={(e) => {
+    //             console.log(tableMeta.rowData[0]);
+    //             try {
+    //               deleteDoc(doc, (db, "history", tableMeta.rowData[0]));
+    //             } catch (err) {
+    //               console.log(err);
+    //             }
+    //           }}
+    //         >
+    //           Delete
+    //         </Button>
+    //       );
+    //     },
+    //   },
+    // },
   ];
 
   const options = {
     filter: true,
     selectableRows: "none",
-
     download: false,
     responsive: "standard",
   };

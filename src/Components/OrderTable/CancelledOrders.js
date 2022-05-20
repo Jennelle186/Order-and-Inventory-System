@@ -338,7 +338,7 @@ const Cancelled = () => {
     expandableRows: true,
     download: false,
     jumpToPage: true,
-    selectableRows: true, // to enable the checkbox when deleting the rows
+    selectableRows: "multiple", // to enable the checkbox when deleting the rows
     onRowsDelete: (rowsDeleted) => {
       const idArray = rowsDeleted.data.map((d) => orders[d.dataIndex].id); // array of all ids to to be deleted
       deleteInFirestore(idArray);

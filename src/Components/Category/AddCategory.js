@@ -44,6 +44,7 @@ const AddCategory = () => {
   };
   //------------------------
 
+  //function to add more colors----------------------
   const { register, control, handleSubmit } = useForm({
     defaultValues: {
       test: [{ option: "" }],
@@ -53,7 +54,9 @@ const AddCategory = () => {
     control,
     name: "test",
   });
+  //---------------------------------------------------
 
+  //function to add the category in the database
   const onSubmit = async (data) => {
     let result = data.test.map((a) => a.option);
     const docRef = await addDoc(collection(db, "category"), {
@@ -61,7 +64,7 @@ const AddCategory = () => {
       value,
       options: result,
     });
-    setOpen(true);
+    setOpen(true); //setting this true will open the alert
     // console.log("Document written with ID: ", docRef.id);
   };
 

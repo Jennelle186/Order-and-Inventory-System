@@ -15,14 +15,6 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import logo from "../../assets/logo.jpg";
 import ButtonForm from "../Button/ButtonForm";
 
-//firebase
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  getAdditionalUserInfo,
-} from "firebase/auth";
-import { auth, signInWithGoogle, db } from "../../Firebase/utils";
-import { doc, setDoc, collection } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = (props) => {
@@ -37,47 +29,7 @@ const Login = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // const googleHandler = async () => {
-  //   signInWithGoogle.setCustomParameters({ prompt: "select_account" });
-  //   signInWithPopup(auth, signInWithGoogle)
-  //     .then(async (result) => {
-  //       // This gives you a Google Access Token. You can use it to access the Google API.
-  //       const credential = GoogleAuthProvider.credentialFromResult(result);
-  //       const token = credential.accessToken;
-  //       // The signed-in user info.
-  //       const user = result.user;
-  //       // redux action? --> dispatch({ type: SET_USER, user });
-
-  //       console.log(user);
-  //       const { isNewUser } = getAdditionalUserInfo(result);
-
-  //       if (isNewUser) {
-  //         await addUser(user.uid);
-  //       } else {
-  //         console.log("User already exists");
-  //       }
-  //     })
-
-  //     .catch((error) => {
-  //       // Handle Errors here.
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       // The email of the user's account used.
-  //       const email = error.email;
-  //       // The AuthCredential type that was used.
-  //       const credential = GoogleAuthProvider.credentialFromError(error);
-  //       // ...
-  //     });
-  // };
-
-  // const addUser = async (userId) => {
-  //   const userRef = doc(db, "users", userId);
-  //   return await setDoc(userRef, {
-  //     id: userId,
-  //     docAddedAt: Date.now(),
-  //   });
-  // };
-
+  //Function for submitting the user's email and passwor and check whether it is a valid user or not
   const handleSubmit = async (e) => {
     e.preventDefault();
     const auth = getAuth();
@@ -87,6 +39,7 @@ const Login = (props) => {
       .then((userCredential) => {
         // Signed in
 
+        //if user is signed in, redirect to the the dashboard or the homepage
         const user = userCredential.user;
         setIsLoading(false);
         navigate("/Dashboard");

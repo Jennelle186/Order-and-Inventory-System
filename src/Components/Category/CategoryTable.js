@@ -27,6 +27,7 @@ const CategoryTable = () => {
   };
   //--------
 
+  //function to retrieve all of the data of the categories------------------
   useEffect(() => {
     let isMounted = true;
 
@@ -54,7 +55,9 @@ const CategoryTable = () => {
       isMounted = false;
     };
   }, []);
+  //----------------------------------------------------------------------------
 
+  //function to delete the category-------------
   const deleteCategory = async (id) => {
     const categoryDoc = doc(db, "category", id);
     await deleteDoc(categoryDoc);
@@ -96,24 +99,6 @@ const CategoryTable = () => {
         },
       },
     },
-
-    // {
-    //   name: "Edit",
-    //   options: {
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       return (
-    //         <Button
-    //           color="success"
-    //           onClick={() =>
-    //             navigate("/edit-category", { state: tableMeta.rowData[0] })
-    //           }
-    //         >
-    //           Edit
-    //         </Button>
-    //       );
-    //     },
-    //   },
-    // },
     {
       name: "Delete",
       options: {

@@ -12,7 +12,6 @@ import PageToOrder from "./Pages/PageToOrder/PageToOrder";
 import EditProduct from "./Components/EditProduct/EditProduct";
 import AddCategory from "./Components/Category/AddCategory";
 import CategoryPage from "./Pages/CategoryPage/categoryPage";
-import EditCategory from "./Components/Category/editCategory";
 
 import PendingOrders from "./Components/OrderTable/PendingOrders";
 import ReadyToBeDelivered from "./Components/OrderTable/ReadyToBeDelivered";
@@ -211,17 +210,6 @@ function App() {
                   <PrivateRoute>
                     <Layout>
                       <AddCategory />
-                    </Layout>
-                  </PrivateRoute>
-                }
-              />
-
-              <Route
-                path="/edit-category"
-                element={
-                  <PrivateRoute>
-                    <Layout>
-                      <EditCategory />
                     </Layout>
                   </PrivateRoute>
                 }

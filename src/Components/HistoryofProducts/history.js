@@ -20,8 +20,6 @@ const History = (props) => {
   const navigate = useNavigate();
 
   //fetching the products document
-  //other solution for the history is that upon clicking on a product, this will show all the history of the product
-  //might also need to add a function for the subcollection in editing a product but instead of createdAt, it will be editedAt
   useEffect(() => {
     let isMounted = true;
 
@@ -54,6 +52,7 @@ const History = (props) => {
     };
   }, []);
 
+  //Displaying the data by columns. The "name" must be a data exactly the same from what was saved in the database
   const columns = [
     {
       name: "cat",
@@ -125,7 +124,7 @@ const History = (props) => {
           if (value) {
             return new Date(value?.seconds * 1000).toLocaleDateString();
           } else {
-            return "hello";
+            return "";
           }
         },
       },
@@ -142,12 +141,6 @@ const History = (props) => {
   return (
     <div>
       <Grid style={{ padding: "1rem" }}>
-        {/* <Stack direction="row" justifyContent="start">
-          <Grid item xs={1}>
-            <ButtonForm onClick={() => navigate(-1)}>go back</ButtonForm>
-          </Grid>{" "}
-        </Stack> */}
-
         <ThemeProvider theme={createTheme()}>
           <MUIDataTable
             title={"History of the Products"}

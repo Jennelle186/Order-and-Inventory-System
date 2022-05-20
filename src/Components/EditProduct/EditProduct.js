@@ -44,6 +44,7 @@ const EditProduct = (props) => {
   };
   //------------------------
 
+  //function to retrieve the selected product details
   const getProduct = async () => {
     const docRef = doc(db, "products", state);
     const docSnap = await getDoc(docRef);
@@ -92,12 +93,14 @@ const EditProduct = (props) => {
     });
   };
 
+  //removing the colors from the colorList array
   const handleColorRemove = (index) => {
     const list = [...colorList];
     list.splice(index, 1);
     setColorList(list);
   };
 
+  //adding the colors in the colorList array
   const handleColorAdd = () => {
     setAddColor(true);
     setColorList([...colorList, { color: "", colorStocks: "" }]);
@@ -140,6 +143,7 @@ const EditProduct = (props) => {
   const handleOptions = (e) => setSize(e.target.value);
   //-----------------------------------------------------
 
+  //submitting the edited product details in firestore
   const handleSubmit = (index) => async (e) => {
     e.preventDefault();
 

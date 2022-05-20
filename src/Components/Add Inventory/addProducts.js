@@ -27,6 +27,7 @@ const AddProducts = () => {
   const [supplier, setSupplier] = useState("");
   const [colorList, setColorList] = useState([{ color: "", colorStocks: "" }]);
 
+  //fetching the categories from the database called "cateogry"
   const fetchCategory = async () => {
     const querySnapshot = await getDocs(collection(db, "category"));
     const arr = [];
@@ -46,6 +47,7 @@ const AddProducts = () => {
     })(); // This immediately runs the func async.
   }, []);
 
+  //setting the category
   const handleCategory = (e) => setCat(e.target.value);
   const handleOptions = (e) => setSize(e.target.value);
 
@@ -71,11 +73,12 @@ const AddProducts = () => {
   const [cat, setCat] = useState(); //select
   const [size1, setSize1] = useState(); //select
 
-  //select
+  //select for the category
   const handleChange = (event) => {
     setCat(event.target.value);
   };
 
+  //for adding more input field for colors and its corresponding stocks
   const handleColorChange = (e, index) => {
     const { name, value } = e.target;
     setColorList((prevState) => {
@@ -85,16 +88,19 @@ const AddProducts = () => {
     });
   };
 
+  //function to remove colors and its correspondng stocks from the colorList array
   const handleColorRemove = (index) => {
     const list = [...colorList];
     list.splice(index, 1);
     setColorList(list);
   };
 
+  //function to add the color and adding it in the colorList array
   const handleColorAdd = () => {
     setColorList([...colorList, { color: "", colorStocks: "" }]);
   };
 
+  //function to reduce the color to be saved in the database as a Map
   const colorMap = colorList.reduce(function (map, obj) {
     map[obj.color] = obj.colorStocks;
     return map;
@@ -105,9 +111,11 @@ const AddProducts = () => {
     setSize(data);
   }
 
+  //function to submit the entered products
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    //this is to save the entered product details in the database called "products"
     const docRef = await addDoc(collection(db, "products"), {
       prodName: productName,
       price: Number(price),
@@ -118,6 +126,7 @@ const AddProducts = () => {
       // color: color,
     });
 
+    //this is to store the entered product details in the subcollection called "history". Additional data includes the data when it was added
     const historyRef = await doc(db, "products", docRef.id);
     const colRef = collection(historyRef, "history");
     addDoc(colRef, {

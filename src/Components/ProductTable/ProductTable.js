@@ -16,6 +16,7 @@ const ProductTable = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  //for the modal when to pop up and when to close-------
   const [isOpen, setisOpen] = useState(false);
 
   const handleOpen = (id) => {
@@ -26,7 +27,9 @@ const ProductTable = () => {
   const handleClose = () => {
     setisOpen(false);
   };
+  //------------------------------------------------------
 
+  //retrieving all of the product details from the database
   useEffect(() => {
     let isMounted = true;
 
@@ -55,11 +58,13 @@ const ProductTable = () => {
     };
   }, []);
 
+  //function to delete the product, it retrieves the id in the row and then delete it
   const deleteProduct = async (id) => {
     const productDoc = doc(db, "products", id);
     await deleteDoc(productDoc);
   };
 
+  //Displaying the data by columns. The "name" must be a data exactly the same from what was saved in the database
   const columns = [
     {
       name: "id",
@@ -136,6 +141,7 @@ const ProductTable = () => {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
+            //button to pass ID of the row which cna be access with the index 0 since it is placed at the first column
             <Button
               color="success"
               onClick={
@@ -159,6 +165,7 @@ const ProductTable = () => {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
+            //button to pass the ID of the row to delete it
             <Button
               color="error"
               onClick={

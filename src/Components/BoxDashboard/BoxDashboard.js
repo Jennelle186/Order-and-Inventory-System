@@ -25,6 +25,7 @@ import {
   getDocs,
   doc,
   getDoc,
+  orderBy,
 } from "firebase/firestore";
 import StocksAlert from "../StocksAlerts/StocksAlert";
 

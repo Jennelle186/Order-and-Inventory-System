@@ -14,6 +14,7 @@ import {
   orderBy,
   doc,
   deleteDoc,
+  writeBatch,
 } from "firebase/firestore";
 
 const History = (props) => {
@@ -57,13 +58,21 @@ const History = (props) => {
   //Displaying the data by columns. The "name" must be a data exactly the same from what was saved in the database
   const columns = [
     // {
-    //   name: "id",
-    //   label: "Category",
+    //   name: "docID",
+    //   label: "Document ID",
     //   options: {
     //     filter: true,
     //     sort: true,
     //   },
     // },
+    {
+      name: "id",
+      label: "ID",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
     {
       name: "cat",
       label: "Category",
@@ -139,30 +148,6 @@ const History = (props) => {
         },
       },
     },
-    // {
-    //   name: "Delete",
-    //   options: {
-    //     filter: false,
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       return (
-    //         //button to pass the ID of the row to delete it
-    //         <Button
-    //           color="error"
-    //           onClick={(e) => {
-    //             console.log(tableMeta.rowData[0]);
-    //             try {
-    //               deleteDoc(doc, (db, "history", tableMeta.rowData[0]));
-    //             } catch (err) {
-    //               console.log(err);
-    //             }
-    //           }}
-    //         >
-    //           Delete
-    //         </Button>
-    //       );
-    //     },
-    //   },
-    // },
   ];
 
   const options = {
@@ -170,7 +155,9 @@ const History = (props) => {
     selectableRows: "none",
     download: false,
     responsive: "standard",
+    // selectableRows: "multiple", // to enable the checkbox when deleting the rows
   };
+
   return (
     <div>
       <Grid style={{ padding: "1rem" }}>

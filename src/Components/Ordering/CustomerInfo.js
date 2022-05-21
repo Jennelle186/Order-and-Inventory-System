@@ -181,12 +181,12 @@ const CustomerInfo = ({
       updateData();
       clearInfo();
       handleCartClearance();
-
+      setOpen(true);
+      window.location.reload();
       // console.log("Document written with ID: ", docRef.id);
     } catch (err) {
       console.log(err);
     }
-    setOpen(true);
   };
 
   //----------------------------------------

@@ -30,6 +30,7 @@ import {
   updateDoc,
   onSnapshot,
   increment,
+  setDoc,
 } from "firebase/firestore";
 
 import Loading from "../Loading/loading";
@@ -338,12 +339,15 @@ const ReadyToBeDelivered = () => {
   };
 
   //update the document of the counts for the # of delivered orders
-  //not sure with this yet
   async function updateData() {
     const docRef = doc(db, "orders", "counts");
-    await updateDoc(docRef, {
-      [`deliveredOrder`]: increment(1),
-    });
+    await setDoc(
+      docRef,
+      {
+        [`deliveredOrder`]: increment(1),
+      },
+      { merge: true }
+    );
   }
 
   function handleTableChange(action, tableState) {

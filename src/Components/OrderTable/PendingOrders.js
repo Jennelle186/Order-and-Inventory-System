@@ -522,9 +522,6 @@ const PendingOrders = () => {
                     );
                   })}
                 </TableBody>
-                <TableFooter>
-                  <Typography> Instructions: {rowData[16]}</Typography>
-                </TableFooter>
               </Table>
             </TableContainer>
           </td>

@@ -385,10 +385,6 @@ const Cancelled = () => {
                     );
                   })}
                 </TableBody>
-                <TableFooter>
-                  {" "}
-                  <Typography> Instructions: {rowData[14]}</Typography>
-                </TableFooter>
               </Table>
             </TableContainer>
           </td>

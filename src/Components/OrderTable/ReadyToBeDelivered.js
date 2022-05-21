@@ -431,10 +431,6 @@ const ReadyToBeDelivered = () => {
                     );
                   })}
                 </TableBody>
-                <TableFooter>
-                  {" "}
-                  <Typography> Instructions: {rowData[16]}</Typography>
-                </TableFooter>
               </Table>
             </TableContainer>
           </td>

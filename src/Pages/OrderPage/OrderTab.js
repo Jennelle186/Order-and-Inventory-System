@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -9,6 +9,7 @@ import PendingOrders from "../../Components/OrderTable/PendingOrders";
 import DeliveredOrders from "../../Components/OrderTable/DeliveredOrders";
 import ReadyToBeDelivered from "../../Components/OrderTable/ReadyToBeDelivered";
 import Cancelled from "../../Components/OrderTable/CancelledOrders";
+import ReturnedOrders from "../../Components/OrderTable/ReturnedOrders";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,11 +45,12 @@ function a11yProps(index) {
 }
 
 const OrderTab = () => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -61,6 +63,7 @@ const OrderTab = () => {
           <Tab label="Ready to be Delivered" {...a11yProps(1)} />
           <Tab label="Delivered" {...a11yProps(2)} />
           <Tab label="Cancelled" {...a11yProps(3)} />
+          <Tab label="Returned" {...a11yProps(4)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -74,6 +77,9 @@ const OrderTab = () => {
       </TabPanel>
       <TabPanel value={value} index={3}>
         <Cancelled />
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <ReturnedOrders />
       </TabPanel>
     </Box>
   );

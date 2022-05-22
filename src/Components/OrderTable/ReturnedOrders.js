@@ -27,21 +27,20 @@ import {
   orderBy,
   where,
   doc,
-  updateDoc,
+  writeBatch,
   setDoc,
   increment,
 } from "firebase/firestore";
 
 import Loading from "../Loading/loading";
 import Print from "./print";
-import ReturnedOrders from "./ReturnedOrders";
 
-const OrderReport = () => {
+const ReturnedOrders = () => {
   const [total, setTotal] = useState(0);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  //function to retrieve the orders with an order status of delivered and arrange it in descending order
+  //function to retrieve the orders with an order status of returned and arrange it in descending order
   useEffect(() => {
     let isMounted = true;
 
@@ -50,7 +49,7 @@ const OrderReport = () => {
       const ordersRef = collection(db, "orders");
       const q = query(
         ordersRef,
-        where("orderStatus", "==", "Delivered"),
+        where("orderStatus", "==", "Returned"),
         orderBy("orderCreatedAt", "desc")
       );
       const querySnapshot = await getDocs(q);
@@ -304,58 +303,7 @@ const OrderReport = () => {
         },
       },
     },
-    {
-      name: "Returned",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return (
-            //button to pass the ID of the row to delete it
-            <Button
-              color="error"
-              onClick={(e) => {
-                e.stopPropagation();
-                updateOrderStatus(tableMeta.rowData[0]);
-              }}
-            >
-              Returned
-            </Button>
-          );
-        },
-      },
-    },
   ];
-
-  //update the order status to delivered
-  const updateOrderStatus = async (id, e) => {
-    try {
-      const orderRef = doc(db, "orders", id);
-
-      // Set the "capital" field of the city 'DC'
-      await updateDoc(orderRef, {
-        orderStatus: "Returned",
-      });
-
-      updateData();
-      alert("Order was returned");
-      window.location.reload();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  //update the document of the counts for the # of delivered orders and add the count for the returned orders
-  async function updateData() {
-    const docRef = doc(db, "orders", "counts");
-    await setDoc(
-      docRef,
-      {
-        [`deliveredOrder`]: increment(-1),
-        [`returnedOrder`]: increment(1),
-      },
-      { merge: true }
-    );
-  }
 
   function handleTableChange(action, tableState) {
     // console.log("handleTableChange:... ", tableState.displayData);
@@ -394,7 +342,12 @@ const OrderReport = () => {
     expandableRows: true,
     download: false,
     jumpToPage: true,
-
+    selectableRows: "multiple", // to enable the checkbox when deleting the rows
+    onRowsDelete: (rowsDeleted) => {
+      const idArray = rowsDeleted.data.map((d) => orders[d.dataIndex].id); // array of all ids to to be deleted
+      deleteInFirestore(idArray);
+      updateData(idArray.length);
+    },
     onRowClick: handleRowClick,
     onTableChange: handleTableChange,
     onTableInit: handleTableChange,
@@ -445,6 +398,37 @@ const OrderReport = () => {
     },
   };
 
+  //deleting data in firebase or deleting the order(s)
+  async function deleteInFirestore(idsToDelete) {
+    try {
+      const batch = writeBatch(db);
+
+      idsToDelete.forEach((id) => {
+        batch.delete(doc(db, "orders", id));
+      });
+
+      await batch.commit();
+      alert("deleted");
+      window.location.reload();
+
+      console.log("deleted");
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  //function to update the counter for the returned orders
+  async function updateData(countId) {
+    const docRef = doc(db, "orders", "counts");
+    await setDoc(
+      docRef,
+      {
+        [`returnedOrder`]: increment(-countId),
+      },
+      { merge: true }
+    );
+  }
+
   return (
     <div style={{ margin: "12px" }}>
       {loading ? (
@@ -458,7 +442,7 @@ const OrderReport = () => {
           </Typography>
           <ThemeProvider theme={createTheme()}>
             <MUIDataTable
-              title={"Delivered Orders"}
+              title={"Returned Orders"}
               columns={columns}
               data={orders}
               options={options}
@@ -476,10 +460,8 @@ const OrderReport = () => {
           <Print rowData={rowData} />
         </DialogContent>
       </Dialog>
-      {/* 
-      <ReturnedOrders /> */}
     </div>
   );
 };
 
-export default OrderReport;
+export default ReturnedOrders;

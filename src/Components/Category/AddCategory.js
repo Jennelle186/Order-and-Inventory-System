@@ -23,7 +23,7 @@ import { addDoc, collection } from "firebase/firestore";
 const AddCategory = () => {
   const navigate = useNavigate();
   const [cat, setCat] = useState();
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("no");
 
   const handleChange = (event) => {
     setValue(event.target.value);

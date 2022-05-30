@@ -283,7 +283,7 @@ const Print = (rowData) => {
                   E Locson Drive, Talon-Talon, Zamboanga City, Zamboanga Del Sur
                   <br />
                   Call us at 0917 676 5010 / 0917 676 5011
-                  <br /> Linesprintingservices@gmail.com | Lines Hub (Facebook)
+                  <br /> linesprintingservices@gmail.com | Lines Hub (Facebook)
                 </Typography>
               </td>
             </tr>

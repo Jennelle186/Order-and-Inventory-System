@@ -99,6 +99,7 @@ const CustomerInfo = ({
   async function updateData() {
     for (const item of cartItems) {
       const docRef = doc(db, "products", item.id);
+      // console.log(item.color, item.quantity);
       await updateDoc(docRef, {
         [`colorMap.${item.color}`]: increment(-1 * item.quantity),
       });
@@ -177,12 +178,12 @@ const CustomerInfo = ({
         downpayment,
         credit,
       });
-      addUser(); //function add user
+      // addUser(); //function add user
       updateData();
       clearInfo();
       handleCartClearance();
       setOpen(true);
-      window.location.reload();
+      // window.location.reload();
       // console.log("Document written with ID: ", docRef.id);
     } catch (err) {
       console.log(err);

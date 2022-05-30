@@ -43,6 +43,7 @@ const Ordering = () => {
   useEffect(() => {
     let isMounted = true;
 
+    //function to retrieve the list of the products
     const getProducts = async () => {
       const querySnapshot = await getDocs(collection(db, "products"));
       const arr = [];
@@ -68,6 +69,7 @@ const Ordering = () => {
     };
   }, []);
 
+  //function to search the product name, size, and the category
   useEffect(() => {
     let x = [...products];
     x = x.filter((y) => {
@@ -79,11 +81,13 @@ const Ordering = () => {
     setIsLoading(true);
   }, [searchKey, products]);
 
+  //clearing up the search field by clicking on the "x" button
   const handleClear = () => {
-    console.log("clear");
+    // console.log("clear");
     setSearchKey("");
   };
 
+  //Function to add the items in the cart
   const handleAdd = (id, name, price, size, cat, color, quan = null) => {
     const productExist = cartItems.find(
       (item) => item.id === id && item.color === color
@@ -109,6 +113,7 @@ const Ordering = () => {
     }
   };
 
+  //function to remove the items in the cart
   const handleRemove = (product) => {
     // console.log(product.color, "remove");
 
@@ -133,19 +138,25 @@ const Ordering = () => {
     }
   };
 
+  //function to instantly clear the cart
   const handleCartClearance = () => {
     setCartItems([]);
   };
 
+  //computing the price and it's quantity for the items in the cart
   const amount = cartItems.reduce(
     (price, item) => price + item.quantity * item.price,
     0
   );
+
   const [discount, setDiscount] = useState(0);
   const [rushFee, setRushFee] = useState(0);
   const [customizeFee, setCustomizeFee] = useState(0);
   const [downpayment, setDownpayment] = useState("");
   // let totalAmount = Number(amount) - (Number(amount) * Number(discount)) / 100; //percentage
+
+  //computing the total amount which includes the amount of the items in the cart
+  //rush fee, customization fee, and the discount fee
   let totalAmount =
     Number(amount) +
     (rushFee ? Number(rushFee) : 0) +
@@ -219,6 +230,7 @@ const Ordering = () => {
               }}
             />
 
+            {/* To view the products according to what was searched or entered in the search field */}
             {searchList.map((item, index) => (
               <List key={item.id + item.color}>
                 <Paper style={{ padding: "12px" }}>

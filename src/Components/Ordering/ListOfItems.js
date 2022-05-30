@@ -81,6 +81,7 @@ const ListItems = ({
                 </TableRow>
               </TableHead>
               <TableBody>
+                {/* List of the cart items */}
                 {cartItems
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((item) => (
@@ -90,6 +91,7 @@ const ListItems = ({
                       </TableCell>
                       <TableCell align="center">{item.color}</TableCell>
                       <TableCell>
+                        {/* input field for the quantity of the product */}
                         <input
                           style={{ width: "2rem" }}
                           min="0"
@@ -125,6 +127,7 @@ const ListItems = ({
                       </TableCell>
 
                       <TableCell align="right">
+                        {/* button to add more quantity of the certain product  */}
                         <IconButton
                           onClick={(e) =>
                             handleAdd(
@@ -202,6 +205,8 @@ const ListItems = ({
                 />
               </RadioGroup>
             </FormControl>
+            {/* If stateOrder is equals to rush or if rushed was clicked in the radio button,
+            then show the field to enter the rush fee  */}
             {stateOrder === "Rush" && (
               <TextField
                 label="Rush Fee"

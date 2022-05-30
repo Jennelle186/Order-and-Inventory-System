@@ -88,14 +88,7 @@ const CustomerInfo = ({
     setNumber(num);
   };
 
-  // async function updateData() {
-  //   let color = "Black";
-  //   const docRef = doc(db, "products", "ubwRjfrSpDtvZIM6sZHD");
-  //   await updateDoc(docRef, {
-  //     [`colorMap.${color}`]: increment(-1 * qty),
-  //   });
-  // }
-
+  //function to deduct the product's quantity when an order is placed
   async function updateData() {
     for (const item of cartItems) {
       const docRef = doc(db, "products", item.id);
@@ -139,6 +132,7 @@ const CustomerInfo = ({
     }
   }
 
+  //clearing up the information or fields after submitting it
   const clearInfo = () => {
     setFirstName("");
     setLastName("");
@@ -155,6 +149,7 @@ const CustomerInfo = ({
     setDiscount("");
   };
 
+  //Saving the orders in the database
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -191,6 +186,7 @@ const CustomerInfo = ({
   };
 
   //----------------------------------------
+  //computation for the credit or the outstanding balance by subtracting the total amount and the downpayment
   let credit = Number(totalAmount) - (downpayment ? Number(downpayment) : 0);
 
   return (

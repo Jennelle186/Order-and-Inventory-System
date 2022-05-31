@@ -195,7 +195,9 @@ const Print = (rowData) => {
                           <Table aria-label="spanning table" size=" small">
                             <TableHead>
                               <TableRow>
-                                <TableCell>Product Name</TableCell>
+                                <TableCell align="left">Product Name</TableCell>
+                                <TableCell align="right">Size</TableCell>
+                                <TableCell>Category</TableCell>
                                 <TableCell align="right">Qty.</TableCell>
                                 <TableCell align="right">Price</TableCell>
                                 <TableCell align="right">Sum</TableCell>
@@ -205,11 +207,13 @@ const Print = (rowData) => {
                             <TableBody>
                               {order.cartItems.map((item, index) => (
                                 <TableRow key={index}>
-                                  <TableCell>{item.name}</TableCell>
+                                  <TableCell>{item.name} </TableCell>
+                                  <TableCell>{item.size}</TableCell>
+                                  <TableCell>{item.cat}</TableCell>
                                   <TableCell align="right">
                                     {item.quantity}
                                   </TableCell>
-                                  <TableCell align="right">
+                                  <TableCell align="left">
                                     Php{" "}
                                     {item.price.toLocaleString(
                                       navigator.language,
@@ -227,7 +231,7 @@ const Print = (rowData) => {
 
                               <TableRow>
                                 <TableCell rowSpan={3} />
-                                <TableCell colSpan={2}>Total Amount</TableCell>
+                                <TableCell colSpan={4}>Total Amount</TableCell>
                                 <TableCell align="right">
                                   Php{" "}
                                   {order.totalAmount.toLocaleString(
@@ -239,7 +243,7 @@ const Print = (rowData) => {
                                 </TableCell>
                               </TableRow>
                               <TableRow>
-                                <TableCell colSpan={2}>Downpayment</TableCell>
+                                <TableCell colSpan={4}>Downpayment</TableCell>
                                 <TableCell align="right">
                                   Php{" "}
                                   {order.downpayment?.toLocaleString(
@@ -251,7 +255,7 @@ const Print = (rowData) => {
                                 </TableCell>
                               </TableRow>
                               <TableRow>
-                                <TableCell colSpan={2}>
+                                <TableCell colSpan={4}>
                                   Outstanding balance
                                 </TableCell>
                                 <TableCell align="right">
